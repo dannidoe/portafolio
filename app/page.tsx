@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import NextImage from 'next/image';
-import { Building2, Droplets, Flame, AlarmSmoke, GraduationCap, Users, CheckCircle2, Linkedin, MessageCircle, Mail, Download } from 'lucide-react';
+import { Building2, Droplets, Flame, AlarmSmoke, GraduationCap, Users, CheckCircle2, Linkedin, MessageCircle, Mail, FileUser } from 'lucide-react';
 
 export default function Portfolio() {
   const [scrollY, setScrollY] = useState(0);
@@ -256,7 +256,7 @@ export default function Portfolio() {
           className="group flex items-center justify-center w-14 h-14 bg-gradient-to-r from-slate-600 to-slate-700 text-white rounded-full hover:shadow-2xl hover:shadow-slate-400/50 hover:scale-110 transition-all duration-300"
           title="Ver CV"
         >
-          <Download className="w-6 h-6" />
+          <FileUser className="w-6 h-6" />
         </a>
       </div>
 
