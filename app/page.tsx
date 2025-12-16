@@ -1,9 +1,9 @@
 'use client';
 
+// Importamos el componente Image de Next.js
+import Image from 'next/image';
 import React, { useState, useEffect } from 'react';
 import { Building2, Droplets, Flame, AlarmSmoke, GraduationCap, Users, CheckCircle2, Linkedin, MessageCircle, Mail, Award, Briefcase, FileText, ArrowRight, Sparkles, Eye } from 'lucide-react';
-
-// Se ELIMINA el componente FloatingProjectsButton
 
 export default function Portfolio() {
   const [scrollY, setScrollY] = useState(0);
@@ -12,8 +12,7 @@ export default function Portfolio() {
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
     
-    // CORRECCIÓN DEL ERROR DE TIPADO DE TYPESCRIPT: 
-    // Se tipa 'e' como MouseEvent para evitar el error 'implicitly has an any type'.
+    // CORRECCIÓN DEL ERROR DE TIPADO DE TYPESCRIPT
     const handleMouseMove = (e: MouseEvent) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
     };
@@ -149,13 +148,13 @@ export default function Portfolio() {
         }}
       />
 
-      {/* Floating nav (Barra de navegación funcional y fija) */}
-      <nav className="fixed top-6 left-1/2 -translate-x-1/2 z-50 bg-white/80 backdrop-blur-md rounded-full px-8 py-3 border border-slate-300 shadow-lg">
-        <div className="flex items-center gap-8">
+      {/* Floating nav (Barra de navegación funcional y fija, optimizada para móvil) */}
+      <nav className="fixed top-6 left-1/2 -translate-x-1/2 z-50 bg-white/80 backdrop-blur-md rounded-full px-4 md:px-8 py-2 md:py-3 border border-slate-300 shadow-lg max-w-[95%]">
+        {/* Contenedor optimizado para scroll horizontal en móvil */}
+        <div className="flex items-center gap-5 md:gap-8 overflow-x-auto whitespace-nowrap scrollbar-hide">
           {['Inicio', 'Perfil', 'Servicios', 'Proyectos', 'Contacto'].map((item, i) => (
             <a
               key={i}
-              // Enlaces funcionales a las secciones. 'Contacto' apunta a #contacto
               href={`#${item.toLowerCase()}`} 
               className={`text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors relative group`}
             >
@@ -165,6 +164,28 @@ export default function Portfolio() {
           ))}
         </div>
       </nav>
+
+      {/* Contact buttons - Floating (Reducidos y movidos a la esquina inferior derecha en móvil) */}
+      <div className="fixed z-50 flex flex-col gap-3 
+        right-4 bottom-4 md:right-8 md:top-1/2 md:-translate-y-1/2">
+        {[
+          { icon: Linkedin, href: 'https://www.linkedin.com/in/danielaf-aguilar/', color: 'from-blue-700 to-blue-800' },
+          { icon: MessageCircle, href: 'https://wa.me/573209207488', color: 'from-green-600 to-green-700' },
+          { icon: Mail, href: 'mailto:danielaf.aguilar@gmail.com', color: 'from-slate-500 to-slate-600' },
+          { icon: FileText, href: '/cv/CV Daniela Aguilar_ESP.pdf', color: 'from-slate-700 to-slate-800' }
+        ].map((item, i) => (
+          <a
+            key={i}
+            href={item.href}
+            target={item.href.startsWith('http') ? '_blank' : undefined}
+            rel={item.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+            // Clases responsivas para reducir tamaño en móvil
+            className={`group relative w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-gradient-to-br ${item.color} flex items-center justify-center hover:scale-110 hover:shadow-xl hover:shadow-slate-400/50 transition-all duration-300 text-white`}
+          >
+            <item.icon className="w-5 h-5 md:w-6 md:h-6" />
+          </a>
+        ))}
+      </div>
 
       {/* Hero */}
       <section id="inicio" className="relative min-h-screen flex items-center justify-center px-6 pt-32 pb-16">
@@ -178,12 +199,12 @@ export default function Portfolio() {
             </div>
             
             {/* Título principal */}
-            <h1 className="text-7xl md:text-9xl font-black tracking-tighter bg-gradient-to-r from-slate-900 via-slate-800 to-blue-800 bg-clip-text text-transparent">
+            <h1 className="text-6xl md:text-9xl font-black tracking-tighter bg-gradient-to-r from-slate-900 via-slate-800 to-blue-800 bg-clip-text text-transparent">
               Daniela Aguilar
             </h1>
             
             {/* Subtítulo */}
-            <p className="text-2xl md:text-3xl text-slate-600 max-w-4xl mx-auto font-light leading-relaxed">
+            <p className="text-xl md:text-3xl text-slate-600 max-w-4xl mx-auto font-light leading-relaxed">
               Transformando <span className={`font-bold text-transparent bg-clip-text bg-gradient-to-r ${ACENTO_GRADIENT}`}>infraestructura MEP</span> con precisión técnica y visión BIM
             </p>
 
@@ -206,26 +227,6 @@ export default function Portfolio() {
           </div>
         </div>
       </section>
-
-      {/* Contact buttons - Floating (enlaces funcionales) */}
-      <div className="fixed right-8 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-3">
-        {[
-          { icon: Linkedin, href: 'https://www.linkedin.com/in/danielaf-aguilar/', color: 'from-blue-700 to-blue-800' },
-          { icon: MessageCircle, href: 'https://wa.me/573209207488', color: 'from-green-600 to-green-700' },
-          { icon: Mail, href: 'mailto:danielaf.aguilar@gmail.com', color: 'from-slate-500 to-slate-600' },
-          { icon: FileText, href: '/cv/CV Daniela Aguilar_ESP.pdf', color: 'from-slate-700 to-slate-800' }
-        ].map((item, i) => (
-          <a
-            key={i}
-            href={item.href}
-            target={item.href.startsWith('http') ? '_blank' : undefined}
-            rel={item.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-            className={`group relative w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-gradient-to-br ${item.color} flex items-center justify-center hover:scale-110 hover:shadow-xl hover:shadow-slate-400/50 transition-all duration-300 text-white`}
-          >
-            <item.icon className="w-6 h-6" />
-          </a>
-        ))}
-      </div>
 
       {/* About */}
       <section id="perfil" className="relative py-32 px-6">
@@ -408,14 +409,18 @@ export default function Portfolio() {
                   idx === projects.length - 1 ? 'md:col-span-2 md:max-w-3xl md:mx-auto' : ''
                 }`}
               >
-                {/* Image reveal */}
+                {/* Image reveal (CORREGIDO: Usando <Image /> de Next.js) */}
                 {project.image && (
                   <div className="relative overflow-hidden max-h-0 group-hover:max-h-[1000px] transition-all duration-700 ease-in-out">
-                    <div className="bg-slate-200">
-                      <img 
+                    <div className="bg-slate-200 relative w-full h-[300px] md:h-[400px]">
+                      <Image 
                         src={project.image}
                         alt={project.name}
-                        className="w-full h-auto object-contain"
+                        // Estas dimensiones son obligatorias para el componente Image
+                        width={600} 
+                        height={400} 
+                        className="object-cover w-full h-full"
+                        sizes="(max-width: 768px) 100vw, 50vw" // Ayuda a la optimización responsiva
                       />
                     </div>
                     <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent pointer-events-none" />
