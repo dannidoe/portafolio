@@ -2,20 +2,26 @@
 
 import Image from 'next/image';
 import React, { useState, useEffect } from 'react';
-import { Building2, Droplets, Flame, AlarmSmoke, GraduationCap, Users, CheckCircle2, Linkedin, MessageCircle, Mail, Award, Briefcase, FileText, Sparkles, Eye, X } from 'lucide-react';
+import {
+  Building2, Droplets, Flame, AlarmSmoke, GraduationCap,
+  Users, CheckCircle2, Linkedin, MessageCircle, Mail,
+  Award, Briefcase, FileText, Sparkles,
+  Eye, X, ChevronLeft, ChevronRight
+} from 'lucide-react';
 
 export default function Portfolio() {
   const [scrollY, setScrollY] = useState(0);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [openImageModal, setOpenImageModal] = useState<string | null>(null);
+
+  // Carrusel
+  const [carouselImages, setCarouselImages] = useState<string[]>([]);
+  const [carouselIndex, setCarouselIndex] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
-    
-    const handleMouseMove = (e: MouseEvent) => {
+    const handleMouseMove = (e: MouseEvent) =>
       setMousePosition({ x: e.clientX, y: e.clientY });
-    };
-    
+
     window.addEventListener('scroll', handleScroll);
     window.addEventListener('mousemove', handleMouseMove);
     return () => {
@@ -24,14 +30,29 @@ export default function Portfolio() {
     };
   }, []);
 
+  // Abre un carrusel con 4 imágenes: base.png, base1.png, base2.png, base3.png
+  const openCarousel = (base: string) => {
+    const imgs = Array.from({ length: 4 }).map((_, i) =>
+      `/images/projects/${base}${i === 0 ? '' : i}.png`
+    );
+    setCarouselImages(imgs);
+    setCarouselIndex(0);
+  };
+
+  const next = () =>
+    setCarouselIndex((i) => (i + 1) % carouselImages.length);
+
+  const prev = () =>
+    setCarouselIndex((i) => (i - 1 + carouselImages.length) % carouselImages.length);
+
   const ACENTO_COLOR = 'blue-700';
-  const ACENTO_GRADIENT = 'from-blue-700 to-blue-800'; 
+  const ACENTO_GRADIENT = 'from-blue-700 to-blue-800';
   const TEXTO_ACENTO = 'text-blue-800';
   const BG_SOBRIO = 'bg-slate-50';
 
   const expertise = [
-    { icon: Droplets, label: 'Hidrosanitarias', gradient: 'from-blue-400 to-blue-500' },
-    { icon: AlarmSmoke, label: 'Contra Incendio', gradient: 'from-orange-500 to-red-600' },
+    { icon: Droplets, label: 'Redes Hidrosanitarias', gradient: 'from-blue-400 to-blue-500' },
+    { icon: AlarmSmoke, label: 'Redes Contra Incendio', gradient: 'from-orange-500 to-red-600' },
     { icon: Flame, label: 'Redes de Gas', gradient: 'from-yellow-400 to-orange-500' },
     { icon: Building2, label: 'Metodología BIM', gradient: 'from-slate-400 to-blue-400' }
   ];
@@ -48,6 +69,7 @@ export default function Portfolio() {
       description: 'Lideré el equipo desarrollando sistemas completos de acueducto, alcantarillado, gas, PCI y bombeo con integración de infraestructura municipal.',
       tools: ['Revit', 'EPANET', 'Sprinkler', 'Navisworks'],
       highlight: true,
+      imageKey: 'parques',
       gradient: 'from-slate-50 to-slate-100'
     },
     {
@@ -61,7 +83,7 @@ export default function Portfolio() {
       description: 'Proyecto premium con análisis hidráulico detallado y coordinación integral de sistemas MEP para vivienda de alta gama.',
       tools: ['Revit', 'EPANET', 'Sprinkler', 'Navisworks'],
       highlight: true,
-      image: "/images/projects/marawa.png",
+      imageKey: 'marawa',
       gradient: 'from-slate-50 to-slate-100'
     },
     {
@@ -74,6 +96,7 @@ export default function Portfolio() {
       lod: 'LOD 350',
       description: 'Ingeniería de detalle con cumplimiento normativo riguroso en proyecto de alta especificación técnica.',
       tools: ['Revit', 'EPANET', 'Sprinkler', 'Navisworks'],
+      imageKey: 'country',
       gradient: 'from-slate-50 to-slate-100'
     },
     {
@@ -86,7 +109,7 @@ export default function Portfolio() {
       lod: 'LOD 350',
       description: 'Dos torres con amenidades múltiples. Optimización de presiones mediante análisis hidráulico. Diseños aprobados Vanti.',
       tools: ['Revit', 'EPANET', 'Sprinkler', 'Navisworks'],
-      image: "/images/projects/central.png",
+      imageKey: 'central',
       gradient: 'from-slate-50 to-slate-100'
     },
     {
@@ -99,7 +122,7 @@ export default function Portfolio() {
       lod: 'LOD 350',
       description: 'Gran escala: coordinación de +1,500 unidades con infraestructura exterior completa bajo metodología BIM.',
       tools: ['Revit', 'EPANET', 'Sprinkler'],
-      image: '/images/projects/robledal.png',
+      imageKey: 'robledal',
       gradient: 'from-slate-50 to-slate-100'
     },
     {
@@ -112,6 +135,7 @@ export default function Portfolio() {
       lod: 'LOD 350',
       description: 'Modelado y coordinación integral con articulación multidisciplinaria. Diseños aprobados Vanti.',
       tools: ['Revit', 'EPANET', 'Sprinkler'],
+      imageKey: 'senderos',
       gradient: 'from-slate-50 to-slate-100'
     },
     {
@@ -124,20 +148,20 @@ export default function Portfolio() {
       lod: 'LOD 350',
       description: 'Diseño completo con áreas comerciales, amenidades y conexión a servicios municipales.',
       tools: ['Revit', 'EPANET'],
-      image: '/images/projects/ceibal.png',
+      imageKey: 'ceibal',
       gradient: 'from-slate-50 to-slate-100'
     }
   ];
 
   return (
     <div className={`min-h-screen ${BG_SOBRIO} text-slate-900 overflow-hidden relative`}>
-      {/* Animated subtle background pattern */}
-      <div 
-        className={`fixed inset-0 ${BG_SOBRIO} bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:24px_24px] opacity-70`} 
+      {/* Fondo */}
+      <div
+        className={`fixed inset-0 ${BG_SOBRIO} bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:24px_24px] opacity-70`}
       />
-      
-      {/* Mouse follower effect - solo desktop */}
-      <div 
+
+      {/* Mouse follower - desktop */}
+      <div
         className="hidden md:block fixed w-96 h-96 rounded-full pointer-events-none mix-blend-multiply opacity-5 blur-3xl transition-all duration-300"
         style={{
           background: 'radial-gradient(circle, rgba(29,78,216,0.3) 0%, transparent 70%)',
@@ -146,13 +170,13 @@ export default function Portfolio() {
         }}
       />
 
-      {/* Floating nav */}
+      {/* Nav flotante */}
       <nav className="fixed top-4 md:top-6 left-1/2 -translate-x-1/2 z-50 bg-white/90 backdrop-blur-md rounded-full px-3 md:px-8 py-2 md:py-3 border border-slate-300 shadow-lg max-w-[95%] md:max-w-none">
         <div className="flex items-center gap-3 md:gap-8 overflow-x-auto scrollbar-hide">
           {['Inicio', 'Perfil', 'Servicios', 'Proyectos', 'Contacto'].map((item, i) => (
             <a
               key={i}
-              href={`#${item.toLowerCase()}`} 
+              href={`#${item.toLowerCase()}`}
               className={`text-xs md:text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors relative group whitespace-nowrap`}
             >
               {item}
@@ -162,7 +186,7 @@ export default function Portfolio() {
         </div>
       </nav>
 
-      {/* Contact buttons - Floating */}
+      {/* Botones de contacto */}
       <div className="fixed z-50 flex flex-col gap-2 md:gap-3 right-3 bottom-3 md:right-8 md:top-1/2 md:-translate-y-1/2">
         {[
           { icon: Linkedin, href: 'https://www.linkedin.com/in/danielaf-aguilar/', color: 'from-blue-700 to-blue-800', label: 'LinkedIn' },
@@ -183,57 +207,24 @@ export default function Portfolio() {
         ))}
       </div>
 
-      {/* Modal de imagen */}
-      {openImageModal && (
-        <div 
-          className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center p-4"
-          onClick={() => setOpenImageModal(null)}
-        >
-          <button
-            onClick={() => setOpenImageModal(null)}
-            className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/30 transition-colors"
-            aria-label="Cerrar imagen"
-          >
-            <X className="w-6 h-6" />
-          </button>
-          <div className="relative max-w-5xl w-full max-h-[90vh]">
-            <Image 
-              src={openImageModal}
-              alt="Vista de proyecto"
-              width={1200}
-              height={800}
-              className="object-contain w-full h-full rounded-lg"
-              onClick={(e) => e.stopPropagation()}
-            />
-          </div>
-        </div>
-      )}
-
       {/* Hero */}
       <section id="inicio" className="relative min-h-screen flex items-center justify-center px-4 md:px-6 pt-24 md:pt-32 pb-12 md:pb-16">
         <div className="max-w-7xl w-full">
           <div className="text-center space-y-6 md:space-y-8" style={{ transform: `translateY(${scrollY * 0.15}px)` }}>
-            
-            {/* Tag de profesión */}
             <div className="inline-flex items-center gap-2 px-4 md:px-6 py-2 bg-blue-700/10 border border-blue-700/20 rounded-full mb-6 md:mb-8">
               <Sparkles className={`w-3 h-3 md:w-4 md:h-4 ${TEXTO_ACENTO}`} />
               <span className={`text-xs md:text-sm font-medium ${TEXTO_ACENTO}`}>Ingeniera Civil & BIM Specialist</span>
             </div>
-            
-            {/* Título principal */}
             <h1 className="text-4xl sm:text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter bg-gradient-to-r from-slate-900 via-slate-800 to-blue-800 bg-clip-text text-transparent px-4">
               Daniela Aguilar
             </h1>
-            
-            {/* Subtítulo */}
             <p className="text-base sm:text-xl md:text-3xl text-slate-600 max-w-4xl mx-auto font-light leading-relaxed px-4">
               Transformando <span className={`font-bold text-transparent bg-clip-text bg-gradient-to-r ${ACENTO_GRADIENT}`}>infraestructura MEP</span> con precisión técnica y visión BIM
             </p>
 
-            {/* Expertise cards */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 pt-12 md:pt-16 max-w-6xl mx-auto">
               {expertise.map((item, idx) => (
-                <div 
+                <div
                   key={idx}
                   className={`group relative p-4 md:p-8 rounded-2xl md:rounded-3xl bg-white shadow-lg border border-slate-200 hover:border-${ACENTO_COLOR} transition-all duration-500 hover:scale-105 hover:-translate-y-1 transform-gpu cursor-default`}
                 >
@@ -245,12 +236,11 @@ export default function Portfolio() {
                 </div>
               ))}
             </div>
-            
           </div>
         </div>
       </section>
 
-      {/* About */}
+      {/* Perfil */}
       <section id="perfil" className="relative py-16 md:py-32 px-4 md:px-6">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12 md:mb-20">
@@ -265,7 +255,6 @@ export default function Portfolio() {
               <p className="text-base md:text-xl text-slate-700 leading-relaxed">
                 Ingeniera civil con <span className={`${TEXTO_ACENTO} font-bold`}>+5 años especializándome</span> en diseño de redes hidrosanitarias, gas y protección contra incendios bajo metodología BIM.
               </p>
-              
               <p className="text-base md:text-xl text-slate-700 leading-relaxed">
                 Actualmente curso <span className="text-slate-900 font-bold">Maestría en Hidrosistemas</span> para profundizar en optimización y análisis hidráulico avanzado.
               </p>
@@ -342,7 +331,7 @@ export default function Portfolio() {
         </div>
       </section>
 
-      {/* Services Section */}
+      {/* Servicios */}
       <section id="servicios" className="relative py-16 md:py-32 px-4 md:px-6 bg-slate-100">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12 md:mb-20">
@@ -392,7 +381,7 @@ export default function Portfolio() {
                 iconColor: 'text-yellow-600'
               }
             ].map((service, idx) => (
-              <div 
+              <div
                 key={idx}
                 className={`group p-6 md:p-8 rounded-xl md:rounded-2xl bg-white shadow-lg border border-slate-200 hover:border-${ACENTO_COLOR} transition-all duration-300 hover:-translate-y-2 transform-gpu`}
               >
@@ -412,7 +401,7 @@ export default function Portfolio() {
         </div>
       </section>
 
-      {/* Projects */}
+      {/* Proyectos + botón carrusel */}
       <section id="proyectos" className="relative py-16 md:py-32 px-4 md:px-6">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12 md:mb-20">
@@ -445,25 +434,26 @@ export default function Portfolio() {
                         <span className="px-2 py-0.5 md:py-1 bg-slate-200 rounded text-xs text-slate-700">{project.type}</span>
                       </div>
                     </div>
-                    
+
                     <div className="flex flex-col items-end space-y-2 flex-shrink-0">
                       <div className="px-2 md:px-3 py-1 md:py-1.5 bg-slate-200 rounded-lg text-xs font-bold text-slate-700 border border-slate-300">
                         {project.lod}
                       </div>
-                      
+
                       {project.highlight && (
                         <div className={`px-2 md:px-3 py-1 bg-blue-700/80 rounded-lg text-xs font-bold text-white shadow-md`}>
                           Reciente
                         </div>
                       )}
-                      
-                      {project.image && (
-                        <button 
-                          onClick={() => setOpenImageModal(project.image || null)}
-                          className={`w-8 h-8 flex items-center justify-center rounded-full border border-slate-300 text-slate-500 hover:text-${ACENTO_COLOR} hover:border-${ACENTO_COLOR} hover:bg-blue-50 transition-all active:scale-95`}
-                          aria-label="Ver imagen del proyecto"
+
+                      {project.imageKey && (
+                        <button
+                          onClick={() => openCarousel(project.imageKey)}
+                          className="relative w-10 h-10 rounded-full border border-slate-300 flex items-center justify-center text-slate-500 hover:text-blue-700 hover:border-blue-700 hover:bg-blue-50 transition-all"
+                          aria-label="Ver carrusel del proyecto"
                         >
-                          <Eye className="w-4 h-4" />
+                          <span className="absolute inline-flex h-full w-full rounded-full bg-blue-600 opacity-20 animate-ping" />
+                          <Eye className="relative w-5 h-5" />
                         </button>
                       )}
                     </div>
@@ -528,7 +518,7 @@ export default function Portfolio() {
               <p className="text-base md:text-xl text-blue-100 mb-8 md:mb-10 max-w-2xl mx-auto">
                 Llevemos tu proyecto al siguiente nivel con precisión técnica y metodología BIM
               </p>
-              <a 
+              <a
                 href="mailto:danielaf.aguilar@gmail.com"
                 className={`inline-flex items-center gap-2 md:gap-3 px-6 md:px-8 py-3 md:py-4 bg-white ${TEXTO_ACENTO} rounded-full text-sm md:text-base font-bold hover:scale-105 hover:shadow-2xl hover:shadow-white/30 transition-all duration-300`}
               >
@@ -550,6 +540,53 @@ export default function Portfolio() {
           <p className="text-slate-500 text-xs md:text-sm">© 2025 · Todos los derechos reservados</p>
         </div>
       </footer>
+
+      {/* Modal Carrusel */}
+      {carouselImages.length > 0 && (
+        <div
+          className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center"
+          onClick={() => setCarouselImages([])}
+        >
+          <button
+            onClick={() => setCarouselImages([])}
+            className="absolute top-6 right-6 text-white"
+            aria-label="Cerrar carrusel"
+          >
+            <X size={28} />
+          </button>
+
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              prev();
+            }}
+            className="absolute left-4 md:left-10 text-white"
+            aria-label="Imagen anterior"
+          >
+            <ChevronLeft size={44} />
+          </button>
+
+          <Image
+            src={carouselImages[carouselIndex]}
+            alt="Proyecto"
+            width={1400}
+            height={900}
+            className="max-h-[85vh] w-auto rounded-xl"
+            onClick={(e) => e.stopPropagation()}
+          />
+
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              next();
+            }}
+            className="absolute right-4 md:right-10 text-white"
+            aria-label="Siguiente imagen"
+          >
+            <ChevronRight size={44} />
+          </button>
+        </div>
+      )}
     </div>
   );
 }
