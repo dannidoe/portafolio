@@ -1,18 +1,17 @@
 'use client';
 
-// Importamos el componente Image de Next.js
 import Image from 'next/image';
 import React, { useState, useEffect } from 'react';
-import { Building2, Droplets, Flame, AlarmSmoke, GraduationCap, Users, CheckCircle2, Linkedin, MessageCircle, Mail, Award, Briefcase, FileText, ArrowRight, Sparkles, Eye } from 'lucide-react';
+import { Building2, Droplets, Flame, AlarmSmoke, GraduationCap, Users, CheckCircle2, Linkedin, MessageCircle, Mail, Award, Briefcase, FileText, Sparkles, Eye, X } from 'lucide-react';
 
 export default function Portfolio() {
   const [scrollY, setScrollY] = useState(0);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [openImageModal, setOpenImageModal] = useState<string | null>(null);
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
     
-    // CORRECCIÓN DEL ERROR DE TIPADO DE TYPESCRIPT
     const handleMouseMove = (e: MouseEvent) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
     };
@@ -25,7 +24,6 @@ export default function Portfolio() {
     };
   }, []);
 
-  // Tonos más sobrios y menos saturados
   const ACENTO_COLOR = 'blue-700';
   const ACENTO_GRADIENT = 'from-blue-700 to-blue-800'; 
   const TEXTO_ACENTO = 'text-blue-800';
@@ -138,9 +136,9 @@ export default function Portfolio() {
         className={`fixed inset-0 ${BG_SOBRIO} bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:24px_24px] opacity-70`} 
       />
       
-      {/* Mouse follower effect */}
+      {/* Mouse follower effect - solo desktop */}
       <div 
-        className="fixed w-96 h-96 rounded-full pointer-events-none mix-blend-multiply opacity-5 blur-3xl transition-all duration-300"
+        className="hidden md:block fixed w-96 h-96 rounded-full pointer-events-none mix-blend-multiply opacity-5 blur-3xl transition-all duration-300"
         style={{
           background: 'radial-gradient(circle, rgba(29,78,216,0.3) 0%, transparent 70%)',
           left: mousePosition.x - 192,
@@ -148,15 +146,14 @@ export default function Portfolio() {
         }}
       />
 
-      {/* Floating nav (Barra de navegación funcional y fija, optimizada para móvil) */}
-      <nav className="fixed top-6 left-1/2 -translate-x-1/2 z-50 bg-white/80 backdrop-blur-md rounded-full px-4 md:px-8 py-2 md:py-3 border border-slate-300 shadow-lg max-w-[95%]">
-        {/* Contenedor optimizado para scroll horizontal en móvil */}
-        <div className="flex items-center gap-5 md:gap-8 overflow-x-auto whitespace-nowrap scrollbar-hide">
+      {/* Floating nav */}
+      <nav className="fixed top-4 md:top-6 left-1/2 -translate-x-1/2 z-50 bg-white/90 backdrop-blur-md rounded-full px-3 md:px-8 py-2 md:py-3 border border-slate-300 shadow-lg max-w-[95%] md:max-w-none">
+        <div className="flex items-center gap-3 md:gap-8 overflow-x-auto scrollbar-hide">
           {['Inicio', 'Perfil', 'Servicios', 'Proyectos', 'Contacto'].map((item, i) => (
             <a
               key={i}
               href={`#${item.toLowerCase()}`} 
-              className={`text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors relative group`}
+              className={`text-xs md:text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors relative group whitespace-nowrap`}
             >
               {item}
               <span className={`absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r ${ACENTO_GRADIENT} group-hover:w-full transition-all duration-300`} />
@@ -165,59 +162,84 @@ export default function Portfolio() {
         </div>
       </nav>
 
-      {/* Contact buttons - Floating (Reducidos y movidos a la esquina inferior derecha en móvil) */}
-      <div className="fixed z-50 flex flex-col gap-3 
-        right-4 bottom-4 md:right-8 md:top-1/2 md:-translate-y-1/2">
+      {/* Contact buttons - Floating */}
+      <div className="fixed z-50 flex flex-col gap-2 md:gap-3 right-3 bottom-3 md:right-8 md:top-1/2 md:-translate-y-1/2">
         {[
-          { icon: Linkedin, href: 'https://www.linkedin.com/in/danielaf-aguilar/', color: 'from-blue-700 to-blue-800' },
-          { icon: MessageCircle, href: 'https://wa.me/573209207488', color: 'from-green-600 to-green-700' },
-          { icon: Mail, href: 'mailto:danielaf.aguilar@gmail.com', color: 'from-slate-500 to-slate-600' },
-          { icon: FileText, href: '/cv/CV Daniela Aguilar_ESP.pdf', color: 'from-slate-700 to-slate-800' }
+          { icon: Linkedin, href: 'https://www.linkedin.com/in/danielaf-aguilar/', color: 'from-blue-700 to-blue-800', label: 'LinkedIn' },
+          { icon: MessageCircle, href: 'https://wa.me/573209207488', color: 'from-green-600 to-green-700', label: 'WhatsApp' },
+          { icon: Mail, href: 'mailto:danielaf.aguilar@gmail.com', color: 'from-slate-500 to-slate-600', label: 'Email' },
+          { icon: FileText, href: '/cv/CV Daniela Aguilar_ESP.pdf', color: 'from-slate-700 to-slate-800', label: 'CV' }
         ].map((item, i) => (
           <a
             key={i}
             href={item.href}
             target={item.href.startsWith('http') ? '_blank' : undefined}
             rel={item.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-            // Clases responsivas para reducir tamaño en móvil
-            className={`group relative w-10 h-10 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-gradient-to-br ${item.color} flex items-center justify-center hover:scale-110 hover:shadow-xl hover:shadow-slate-400/50 transition-all duration-300 text-white`}
+            aria-label={item.label}
+            className={`group relative w-11 h-11 md:w-14 md:h-14 rounded-xl md:rounded-2xl bg-gradient-to-br ${item.color} flex items-center justify-center hover:scale-110 hover:shadow-xl hover:shadow-slate-400/50 transition-all duration-300 text-white`}
           >
             <item.icon className="w-5 h-5 md:w-6 md:h-6" />
           </a>
         ))}
       </div>
 
+      {/* Modal de imagen */}
+      {openImageModal && (
+        <div 
+          className="fixed inset-0 z-[100] bg-black/90 flex items-center justify-center p-4"
+          onClick={() => setOpenImageModal(null)}
+        >
+          <button
+            onClick={() => setOpenImageModal(null)}
+            className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center text-white hover:bg-white/30 transition-colors"
+            aria-label="Cerrar imagen"
+          >
+            <X className="w-6 h-6" />
+          </button>
+          <div className="relative max-w-5xl w-full max-h-[90vh]">
+            <Image 
+              src={openImageModal}
+              alt="Vista de proyecto"
+              width={1200}
+              height={800}
+              className="object-contain w-full h-full rounded-lg"
+              onClick={(e) => e.stopPropagation()}
+            />
+          </div>
+        </div>
+      )}
+
       {/* Hero */}
-      <section id="inicio" className="relative min-h-screen flex items-center justify-center px-6 pt-32 pb-16">
+      <section id="inicio" className="relative min-h-screen flex items-center justify-center px-4 md:px-6 pt-24 md:pt-32 pb-12 md:pb-16">
         <div className="max-w-7xl w-full">
-          <div className="text-center space-y-8" style={{ transform: `translateY(${scrollY * 0.15}px)` }}>
+          <div className="text-center space-y-6 md:space-y-8" style={{ transform: `translateY(${scrollY * 0.15}px)` }}>
             
             {/* Tag de profesión */}
-            <div className="inline-flex items-center gap-2 px-6 py-2 bg-blue-700/10 border border-blue-700/20 rounded-full mb-8">
-              <Sparkles className={`w-4 h-4 ${TEXTO_ACENTO}`} />
-              <span className={`text-sm font-medium ${TEXTO_ACENTO}`}>Ingeniera Civil & BIM Specialist</span>
+            <div className="inline-flex items-center gap-2 px-4 md:px-6 py-2 bg-blue-700/10 border border-blue-700/20 rounded-full mb-6 md:mb-8">
+              <Sparkles className={`w-3 h-3 md:w-4 md:h-4 ${TEXTO_ACENTO}`} />
+              <span className={`text-xs md:text-sm font-medium ${TEXTO_ACENTO}`}>Ingeniera Civil & BIM Specialist</span>
             </div>
             
             {/* Título principal */}
-            <h1 className="text-6xl md:text-9xl font-black tracking-tighter bg-gradient-to-r from-slate-900 via-slate-800 to-blue-800 bg-clip-text text-transparent">
+            <h1 className="text-4xl sm:text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter bg-gradient-to-r from-slate-900 via-slate-800 to-blue-800 bg-clip-text text-transparent px-4">
               Daniela Aguilar
             </h1>
             
             {/* Subtítulo */}
-            <p className="text-xl md:text-3xl text-slate-600 max-w-4xl mx-auto font-light leading-relaxed">
+            <p className="text-base sm:text-xl md:text-3xl text-slate-600 max-w-4xl mx-auto font-light leading-relaxed px-4">
               Transformando <span className={`font-bold text-transparent bg-clip-text bg-gradient-to-r ${ACENTO_GRADIENT}`}>infraestructura MEP</span> con precisión técnica y visión BIM
             </p>
 
             {/* Expertise cards */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-16 max-w-6xl mx-auto">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 pt-12 md:pt-16 max-w-6xl mx-auto">
               {expertise.map((item, idx) => (
                 <div 
                   key={idx}
-                  className={`group relative p-6 md:p-8 rounded-3xl bg-white shadow-lg border border-slate-200 hover:border-${ACENTO_COLOR} transition-all duration-500 hover:scale-105 hover:-translate-y-1 transform-gpu cursor-default`}
+                  className={`group relative p-4 md:p-8 rounded-2xl md:rounded-3xl bg-white shadow-lg border border-slate-200 hover:border-${ACENTO_COLOR} transition-all duration-500 hover:scale-105 hover:-translate-y-1 transform-gpu cursor-default`}
                 >
-                  <div className={`absolute inset-0 bg-gradient-to-br ${item.gradient} opacity-0 group-hover:opacity-10 rounded-3xl transition-opacity duration-500`} />
-                  <item.icon className={`w-10 h-10 md:w-12 md:h-12 mb-4 mx-auto text-slate-500 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-br ${item.gradient} transition-all duration-300`} strokeWidth={1.5} />
-                  <p className="text-sm font-bold text-slate-700 group-hover:text-slate-900 transition-colors">
+                  <div className={`absolute inset-0 bg-gradient-to-br ${item.gradient} opacity-0 group-hover:opacity-10 rounded-2xl md:rounded-3xl transition-opacity duration-500`} />
+                  <item.icon className={`w-8 h-8 md:w-12 md:h-12 mb-3 md:mb-4 mx-auto text-slate-500 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-br ${item.gradient} transition-all duration-300`} strokeWidth={1.5} />
+                  <p className="text-xs md:text-sm font-bold text-slate-700 group-hover:text-slate-900 transition-colors">
                     {item.label}
                   </p>
                 </div>
@@ -229,31 +251,31 @@ export default function Portfolio() {
       </section>
 
       {/* About */}
-      <section id="perfil" className="relative py-32 px-6">
+      <section id="perfil" className="relative py-16 md:py-32 px-4 md:px-6">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-20">
-            <h2 className="text-5xl md:text-7xl font-black mb-4 bg-gradient-to-r from-slate-900 to-slate-600 bg-clip-text text-transparent">
+          <div className="text-center mb-12 md:mb-20">
+            <h2 className="text-3xl sm:text-5xl md:text-7xl font-black mb-4 bg-gradient-to-r from-slate-900 to-slate-600 bg-clip-text text-transparent">
               Perfil Profesional
             </h2>
-            <div className={`h-1.5 w-32 bg-gradient-to-r ${ACENTO_GRADIENT} mx-auto rounded-full`} />
+            <div className={`h-1.5 w-24 md:w-32 bg-gradient-to-r ${ACENTO_GRADIENT} mx-auto rounded-full`} />
           </div>
 
-          <div className="grid md:grid-cols-2 gap-12">
-            <div className="space-y-6">
-              <p className="text-xl text-slate-700 leading-relaxed">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12">
+            <div className="space-y-4 md:space-y-6">
+              <p className="text-base md:text-xl text-slate-700 leading-relaxed">
                 Ingeniera civil con <span className={`${TEXTO_ACENTO} font-bold`}>+5 años especializándome</span> en diseño de redes hidrosanitarias, gas y protección contra incendios bajo metodología BIM.
               </p>
               
-              <p className="text-xl text-slate-700 leading-relaxed">
+              <p className="text-base md:text-xl text-slate-700 leading-relaxed">
                 Actualmente curso <span className="text-slate-900 font-bold">Maestría en Hidrosistemas</span> para profundizar en optimización y análisis hidráulico avanzado.
               </p>
 
-              <div className="space-y-4 pt-6">
-                <div className={`p-6 rounded-2xl bg-slate-100 shadow-md border border-blue-300 hover:border-${ACENTO_COLOR} transition-colors`}>
-                  <div className="flex items-start gap-4">
-                    <Users className={`w-8 h-8 ${TEXTO_ACENTO} flex-shrink-0 mt-1`} />
+              <div className="space-y-3 md:space-y-4 pt-4 md:pt-6">
+                <div className={`p-4 md:p-6 rounded-xl md:rounded-2xl bg-slate-100 shadow-md border border-blue-300 hover:border-${ACENTO_COLOR} transition-colors`}>
+                  <div className="flex items-start gap-3 md:gap-4">
+                    <Users className={`w-6 h-6 md:w-8 md:h-8 ${TEXTO_ACENTO} flex-shrink-0 mt-1`} />
                     <div>
-                      <h4 className="font-bold text-slate-900 mb-2 text-lg">Colaboración BIM</h4>
+                      <h4 className="font-bold text-slate-900 mb-1 md:mb-2 text-base md:text-lg">Colaboración BIM</h4>
                       <p className="text-slate-600 text-sm leading-relaxed">
                         Coordinación multidisciplinaria en BIM 360 y Autodesk Construction Cloud
                       </p>
@@ -261,11 +283,11 @@ export default function Portfolio() {
                   </div>
                 </div>
 
-                <div className="p-6 rounded-2xl bg-slate-100 shadow-md border border-slate-300 hover:border-slate-400 transition-colors">
-                  <div className="flex items-start gap-4">
-                    <CheckCircle2 className="w-8 h-8 text-slate-500 flex-shrink-0 mt-1" />
+                <div className="p-4 md:p-6 rounded-xl md:rounded-2xl bg-slate-100 shadow-md border border-slate-300 hover:border-slate-400 transition-colors">
+                  <div className="flex items-start gap-3 md:gap-4">
+                    <CheckCircle2 className="w-6 h-6 md:w-8 md:h-8 text-slate-500 flex-shrink-0 mt-1" />
                     <div>
-                      <h4 className="font-bold text-slate-900 mb-2 text-lg">Cumplimiento Normativo</h4>
+                      <h4 className="font-bold text-slate-900 mb-1 md:mb-2 text-base md:text-lg">Cumplimiento Normativo</h4>
                       <p className="text-slate-600 text-sm leading-relaxed">
                         NFPA · NTC 1500 · NTC 2505 · Resolución 0330 · SISTEC EAAB
                       </p>
@@ -275,17 +297,17 @@ export default function Portfolio() {
               </div>
             </div>
 
-            <div className="space-y-8">
+            <div className="space-y-6 md:space-y-8">
               <div>
-                <h3 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-3">
-                  <Briefcase className={`w-6 h-6 ${TEXTO_ACENTO}`} />
+                <h3 className="text-xl md:text-2xl font-bold text-slate-900 mb-4 md:mb-6 flex items-center gap-2 md:gap-3">
+                  <Briefcase className={`w-5 h-5 md:w-6 md:h-6 ${TEXTO_ACENTO}`} />
                   Stack Técnico
                 </h3>
-                <div className="flex flex-wrap gap-3">
+                <div className="flex flex-wrap gap-2 md:gap-3">
                   {['Revit MEP', 'EPANET', 'The Sprinkler Program', 'Navisworks', 'AutoCAD', 'BIM 360', 'ACC'].map((skill, i) => (
                     <span
                       key={i}
-                      className="px-5 py-2.5 rounded-xl bg-slate-100 border border-slate-300 text-slate-700 text-sm font-semibold hover:bg-blue-700/10 hover:border-blue-700 transition-all duration-300"
+                      className="px-3 md:px-5 py-1.5 md:py-2.5 rounded-lg md:rounded-xl bg-slate-100 border border-slate-300 text-slate-700 text-xs md:text-sm font-semibold hover:bg-blue-700/10 hover:border-blue-700 transition-all duration-300"
                     >
                       {skill}
                     </span>
@@ -294,11 +316,11 @@ export default function Portfolio() {
               </div>
 
               <div>
-                <h3 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-3">
-                  <Award className={`w-6 h-6 ${TEXTO_ACENTO}`} />
+                <h3 className="text-xl md:text-2xl font-bold text-slate-900 mb-4 md:mb-6 flex items-center gap-2 md:gap-3">
+                  <Award className={`w-5 h-5 md:w-6 md:h-6 ${TEXTO_ACENTO}`} />
                   Competencias Clave
                 </h3>
-                <div className="space-y-3">
+                <div className="space-y-2 md:space-y-3">
                   {[
                     'Análisis y optimización hidráulica',
                     'Coordinación multidisciplinaria BIM',
@@ -306,9 +328,9 @@ export default function Portfolio() {
                     'Visión constructiva integral',
                     'Inglés B2 - Upper Intermediate'
                   ].map((strength, i) => (
-                    <div key={i} className="flex items-center gap-3 group cursor-default">
-                      <div className={`w-2.5 h-2.5 rounded-full bg-gradient-to-r ${ACENTO_GRADIENT} group-hover:scale-150 transition-transform`} />
-                      <span className="text-slate-700 group-hover:text-slate-900 transition-colors text-lg">
+                    <div key={i} className="flex items-center gap-2 md:gap-3 group cursor-default">
+                      <div className={`w-2 h-2 md:w-2.5 md:h-2.5 rounded-full bg-gradient-to-r ${ACENTO_GRADIENT} group-hover:scale-150 transition-transform`} />
+                      <span className="text-slate-700 group-hover:text-slate-900 transition-colors text-sm md:text-lg">
                         {strength}
                       </span>
                     </div>
@@ -321,17 +343,17 @@ export default function Portfolio() {
       </section>
 
       {/* Services Section */}
-      <section id="servicios" className="relative py-32 px-6 bg-slate-100">
+      <section id="servicios" className="relative py-16 md:py-32 px-4 md:px-6 bg-slate-100">
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-20">
-            <h2 className="text-5xl md:text-7xl font-black mb-4 bg-gradient-to-r from-slate-900 to-slate-600 bg-clip-text text-transparent">
+          <div className="text-center mb-12 md:mb-20">
+            <h2 className="text-3xl sm:text-5xl md:text-7xl font-black mb-4 bg-gradient-to-r from-slate-900 to-slate-600 bg-clip-text text-transparent">
               Servicios Especializados
             </h2>
-            <div className={`h-1.5 w-32 bg-gradient-to-r ${ACENTO_GRADIENT} mx-auto rounded-full mb-6`} />
-            <p className="text-xl text-slate-600">Soluciones integrales en diseño MEP bajo metodología BIM</p>
+            <div className={`h-1.5 w-24 md:w-32 bg-gradient-to-r ${ACENTO_GRADIENT} mx-auto rounded-full mb-4 md:mb-6`} />
+            <p className="text-base md:text-xl text-slate-600">Soluciones integrales en diseño MEP bajo metodología BIM</p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {[
               {
                 title: 'Diseño Hidrosanitario',
@@ -372,10 +394,10 @@ export default function Portfolio() {
             ].map((service, idx) => (
               <div 
                 key={idx}
-                className={`group p-8 rounded-2xl bg-white shadow-lg border border-slate-200 hover:border-${ACENTO_COLOR} transition-all duration-300 hover:-translate-y-2 transform-gpu`}
+                className={`group p-6 md:p-8 rounded-xl md:rounded-2xl bg-white shadow-lg border border-slate-200 hover:border-${ACENTO_COLOR} transition-all duration-300 hover:-translate-y-2 transform-gpu`}
               >
-                <service.icon className={`w-12 h-12 mb-4 ${service.iconColor} transition-colors`} strokeWidth={1.5} />
-                <h3 className="text-xl font-bold text-slate-900 mb-4">{service.title}</h3>
+                <service.icon className={`w-10 h-10 md:w-12 md:h-12 mb-3 md:mb-4 ${service.iconColor} transition-colors`} strokeWidth={1.5} />
+                <h3 className="text-lg md:text-xl font-bold text-slate-900 mb-3 md:mb-4">{service.title}</h3>
                 <ul className="space-y-2">
                   {service.items.map((item, i) => (
                     <li key={i} className="flex items-start gap-2 text-slate-700 text-sm">
@@ -391,91 +413,74 @@ export default function Portfolio() {
       </section>
 
       {/* Projects */}
-      <section id="proyectos" className="relative py-32 px-6">
+      <section id="proyectos" className="relative py-16 md:py-32 px-4 md:px-6">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-20">
-            <h2 className="text-5xl md:text-7xl font-black mb-4 bg-gradient-to-r from-slate-900 to-slate-600 bg-clip-text text-transparent">
+          <div className="text-center mb-12 md:mb-20">
+            <h2 className="text-3xl sm:text-5xl md:text-7xl font-black mb-4 bg-gradient-to-r from-slate-900 to-slate-600 bg-clip-text text-transparent">
               Proyectos Destacados
             </h2>
-            <div className={`h-1.5 w-32 bg-gradient-to-r ${ACENTO_GRADIENT} mx-auto rounded-full mb-6`} />
-            <p className="text-xl text-slate-600">+5,000 unidades diseñadas · LOD 350 · Metodología BIM</p>
+            <div className={`h-1.5 w-24 md:w-32 bg-gradient-to-r ${ACENTO_GRADIENT} mx-auto rounded-full mb-4 md:mb-6`} />
+            <p className="text-base md:text-xl text-slate-600">+5,000 unidades diseñadas · LOD 350 · Metodología BIM</p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-2 gap-6 md:gap-8">
             {projects.map((project, idx) => (
               <div
                 key={idx}
-                className={`group relative rounded-3xl bg-white shadow-xl border border-slate-200 hover:border-${ACENTO_COLOR} transition-all duration-500 overflow-hidden hover:scale-[1.01] transform-gpu ${
+                className={`group relative rounded-2xl md:rounded-3xl bg-white shadow-xl border border-slate-200 hover:border-${ACENTO_COLOR} transition-all duration-500 overflow-hidden hover:scale-[1.01] transform-gpu ${
                   idx === projects.length - 1 ? 'md:col-span-2 md:max-w-3xl md:mx-auto' : ''
                 }`}
               >
-                {/* Image reveal (CORREGIDO: Usando <Image /> de Next.js) */}
-                {project.image && (
-                  <div className="relative overflow-hidden max-h-0 group-hover:max-h-[1000px] transition-all duration-700 ease-in-out">
-                    <div className="bg-slate-200 relative w-full h-[300px] md:h-[400px]">
-                      <Image 
-                        src={project.image}
-                        alt={project.name}
-                        // Estas dimensiones son obligatorias para el componente Image
-                        width={600} 
-                        height={400} 
-                        className="object-cover w-full h-full"
-                        sizes="(max-width: 768px) 100vw, 50vw" // Ayuda a la optimización responsiva
-                      />
-                    </div>
-                    <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent pointer-events-none" />
-                  </div>
-                )}
-
-                <div className="p-8 relative z-10">
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="flex-1">
-                      <h3 className={`text-3xl font-black text-slate-900 mb-3 group-hover:${TEXTO_ACENTO} transition-all duration-300`}>
+                <div className="p-6 md:p-8 relative z-10">
+                  <div className="flex items-start justify-between mb-4 gap-3">
+                    <div className="flex-1 min-w-0">
+                      <h3 className={`text-xl sm:text-2xl md:text-3xl font-black text-slate-900 mb-2 md:mb-3 group-hover:${TEXTO_ACENTO} transition-all duration-300`}>
                         {project.name}
                       </h3>
-                      <div className="flex items-center gap-3 text-sm text-slate-500">
+                      <div className="flex flex-wrap items-center gap-2 text-xs md:text-sm text-slate-500">
                         <span className={`font-bold ${TEXTO_ACENTO}`}>{project.year}</span>
-                        <span>·</span>
+                        <span className="hidden sm:inline">·</span>
                         <span>{project.location}</span>
-                        <span>·</span>
-                        <span className="px-2 py-1 bg-slate-200 rounded text-xs text-slate-700">{project.type}</span>
+                        <span className="hidden sm:inline">·</span>
+                        <span className="px-2 py-0.5 md:py-1 bg-slate-200 rounded text-xs text-slate-700">{project.type}</span>
                       </div>
                     </div>
                     
-                    {/* ESTRUCTURA AJUSTADA: LOD, Reciente, Ver */}
                     <div className="flex flex-col items-end space-y-2 flex-shrink-0">
-                        {/* LOD */}
-                        <div className="px-3 py-1.5 bg-slate-200 rounded-lg text-xs font-bold text-slate-700 border border-slate-300">
-                          {project.lod}
+                      <div className="px-2 md:px-3 py-1 md:py-1.5 bg-slate-200 rounded-lg text-xs font-bold text-slate-700 border border-slate-300">
+                        {project.lod}
+                      </div>
+                      
+                      {project.highlight && (
+                        <div className={`px-2 md:px-3 py-1 bg-blue-700/80 rounded-lg text-xs font-bold text-white shadow-md`}>
+                          Reciente
                         </div>
-                        
-                        {/* Reciente 2025 */}
-                        {project.highlight && (
-                          <div className={`px-3 py-1 bg-blue-700/80 rounded-lg text-xs font-bold text-white shadow-md`}>
-                            Reciente
-                          </div>
-                        )}
-                        
-                        {/* Ícono de Ver (El usuario puede añadir la funcionalidad aquí) */}
-                        <button className={`w-8 h-8 flex items-center justify-center rounded-full border border-slate-300 text-slate-500 hover:text-${ACENTO_COLOR} hover:border-${ACENTO_COLOR} transition-colors`}>
-                            <Eye className="w-4 h-4" />
+                      )}
+                      
+                      {project.image && (
+                        <button 
+                          onClick={() => setOpenImageModal(project.image || null)}
+                          className={`w-8 h-8 flex items-center justify-center rounded-full border border-slate-300 text-slate-500 hover:text-${ACENTO_COLOR} hover:border-${ACENTO_COLOR} hover:bg-blue-50 transition-all active:scale-95`}
+                          aria-label="Ver imagen del proyecto"
+                        >
+                          <Eye className="w-4 h-4" />
                         </button>
+                      )}
                     </div>
-
                   </div>
 
-                  <div className="flex items-center gap-6 mb-6 pb-6 border-b border-slate-200">
+                  <div className="flex items-center gap-4 md:gap-6 mb-4 md:mb-6 pb-4 md:pb-6 border-b border-slate-200">
                     <div>
-                      <p className="text-2xl font-bold text-slate-900">{project.units}</p>
+                      <p className="text-xl md:text-2xl font-bold text-slate-900">{project.units}</p>
                       <p className="text-xs text-slate-500">unidades</p>
                     </div>
                     <div>
-                      <p className="text-lg font-semibold text-slate-700">{project.area}</p>
+                      <p className="text-base md:text-lg font-semibold text-slate-700">{project.area}</p>
                       <p className="text-xs text-slate-500">área total</p>
                     </div>
                   </div>
 
-                  <p className="text-slate-700 leading-relaxed mb-6">
+                  <p className="text-sm md:text-base text-slate-700 leading-relaxed mb-4 md:mb-6">
                     {project.description}
                   </p>
 
@@ -483,7 +488,7 @@ export default function Portfolio() {
                     {project.tools.map((tool, i) => (
                       <span
                         key={i}
-                        className="px-3 py-1.5 bg-slate-200 border border-slate-300 rounded-lg text-xs font-medium text-slate-600"
+                        className="px-2.5 md:px-3 py-1 md:py-1.5 bg-slate-200 border border-slate-300 rounded-lg text-xs font-medium text-slate-600"
                       >
                         {tool}
                       </span>
@@ -495,40 +500,40 @@ export default function Portfolio() {
           </div>
 
           {/* Stats */}
-          <div className="mt-24 grid grid-cols-2 md:grid-cols-3 gap-6">
+          <div className="mt-16 md:mt-24 grid grid-cols-3 gap-4 md:gap-6">
             {[
               { value: '5,000+', label: 'Unidades Diseñadas', icon: Building2 },
               { value: 'LOD 350', label: 'Nivel de Detalle', icon: Award },
               { value: '5+', label: 'Años de Experiencia', icon: GraduationCap }
             ].map((stat, i) => (
-              <div key={i} className={`text-center p-8 rounded-3xl bg-white shadow-lg border border-slate-200 hover:border-${ACENTO_COLOR}/50 transition-all hover:scale-105 transform-gpu`}>
-                <stat.icon className={`w-10 h-10 mx-auto mb-4 ${TEXTO_ACENTO}`} />
-                <p className="text-4xl font-black text-slate-900 mb-2">{stat.value}</p>
-                <p className="text-sm text-slate-600">{stat.label}</p>
+              <div key={i} className={`text-center p-6 md:p-8 rounded-2xl md:rounded-3xl bg-white shadow-lg border border-slate-200 hover:border-${ACENTO_COLOR}/50 transition-all hover:scale-105 transform-gpu`}>
+                <stat.icon className={`w-8 h-8 md:w-10 md:h-10 mx-auto mb-3 md:mb-4 ${TEXTO_ACENTO}`} />
+                <p className="text-2xl md:text-4xl font-black text-slate-900 mb-1 md:mb-2">{stat.value}</p>
+                <p className="text-xs md:text-sm text-slate-600">{stat.label}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA (Se le añade el ID "contacto" para que el nav funcione) */}
-      <section id="contacto" className="relative py-32 px-6">
+      {/* CTA */}
+      <section id="contacto" className="relative py-16 md:py-32 px-4 md:px-6">
         <div className="max-w-5xl mx-auto">
-          <div className={`relative p-12 md:p-16 rounded-3xl bg-gradient-to-br ${ACENTO_GRADIENT} overflow-hidden shadow-2xl shadow-blue-500/30`}>
+          <div className={`relative p-8 md:p-16 rounded-2xl md:rounded-3xl bg-gradient-to-br ${ACENTO_GRADIENT} overflow-hidden shadow-2xl shadow-blue-500/30`}>
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.1),transparent_50%)]" />
             <div className="relative z-10 text-center">
-              <h2 className="text-5xl md:text-6xl font-black text-white mb-6">
+              <h2 className="text-3xl sm:text-4xl md:text-6xl font-black text-white mb-4 md:mb-6">
                 ¿Listo para colaborar?
               </h2>
-              <p className="text-xl text-blue-100 mb-10 max-w-2xl mx-auto">
+              <p className="text-base md:text-xl text-blue-100 mb-8 md:mb-10 max-w-2xl mx-auto">
                 Llevemos tu proyecto al siguiente nivel con precisión técnica y metodología BIM
               </p>
               <a 
                 href="mailto:danielaf.aguilar@gmail.com"
-                className={`inline-flex items-center gap-3 px-8 py-4 bg-white ${TEXTO_ACENTO} rounded-full font-bold hover:scale-105 hover:shadow-2xl hover:shadow-white/30 transition-all duration-300`}
+                className={`inline-flex items-center gap-2 md:gap-3 px-6 md:px-8 py-3 md:py-4 bg-white ${TEXTO_ACENTO} rounded-full text-sm md:text-base font-bold hover:scale-105 hover:shadow-2xl hover:shadow-white/30 transition-all duration-300`}
               >
                 Hablemos Hoy
-                <Mail className="w-5 h-5" />
+                <Mail className="w-4 h-4 md:w-5 md:h-5" />
               </a>
             </div>
           </div>
@@ -536,13 +541,13 @@ export default function Portfolio() {
       </section>
 
       {/* Footer */}
-      <footer className="relative py-12 px-6 border-t border-slate-200 bg-white">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-          <div>
-            <h3 className="text-2xl font-bold text-slate-900 mb-1">Daniela Aguilar</h3>
-            <p className="text-slate-500 text-sm">Ingeniera Civil & Especialista BIM MEP</p>
+      <footer className="relative py-8 md:py-12 px-4 md:px-6 border-t border-slate-200 bg-white">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4 md:gap-6">
+          <div className="text-center md:text-left">
+            <h3 className="text-xl md:text-2xl font-bold text-slate-900 mb-1">Daniela Aguilar</h3>
+            <p className="text-slate-500 text-xs md:text-sm">Ingeniera Civil & Especialista BIM MEP</p>
           </div>
-          <p className="text-slate-500 text-sm">© 2025 · Todos los derechos reservados</p>
+          <p className="text-slate-500 text-xs md:text-sm">© 2025 · Todos los derechos reservados</p>
         </div>
       </footer>
     </div>
