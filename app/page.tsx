@@ -3,23 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { Building2, Droplets, Flame, AlarmSmoke, GraduationCap, Users, CheckCircle2, Linkedin, MessageCircle, Mail, Award, Briefcase, FileText, ArrowRight, Sparkles, Eye } from 'lucide-react';
 
-// Componente ajustado para el botón de Proyectos Flotante
-const FloatingProjectsButton = () => {
-    return (
-        // Se sube la posición (top-40) y se mantiene fijo (fixed)
-        <a 
-            href="#proyectos"
-            className="fixed top-40 right-8 z-50 inline-flex items-center gap-2 px-6 py-3 
-            // Tonos azules menos saturados para sobriedad
-            bg-gradient-to-r from-blue-700 to-blue-800 text-white rounded-full font-bold 
-            shadow-xl shadow-blue-500/30 hover:scale-105 transition-all duration-300 transform-gpu"
-        >
-            Ver Proyectos 
-            <ArrowRight className="w-5 h-5 ml-1" />
-        </a>
-    );
-}
-
+// Se ELIMINA el componente FloatingProjectsButton
 
 export default function Portfolio() {
   const [scrollY, setScrollY] = useState(0);
@@ -27,7 +11,10 @@ export default function Portfolio() {
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
-    const handleMouseMove = (e) => {
+    
+    // CORRECCIÓN DEL ERROR DE TIPADO DE TYPESCRIPT: 
+    // Se tipa 'e' como MouseEvent para evitar el error 'implicitly has an any type'.
+    const handleMouseMove = (e: MouseEvent) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
     };
     
@@ -53,7 +40,6 @@ export default function Portfolio() {
   ];
 
   const projects = [
-    // El gradient de los proyectos se cambia para ser visualmente agradable en fondo claro
     {
       name: 'PARQUES DEL VÍNCULO',
       year: '2025',
@@ -65,7 +51,7 @@ export default function Portfolio() {
       description: 'Lideré el equipo desarrollando sistemas completos de acueducto, alcantarillado, gas, PCI y bombeo con integración de infraestructura municipal.',
       tools: ['Revit', 'EPANET', 'Sprinkler', 'Navisworks'],
       highlight: true,
-      gradient: 'from-slate-50 to-slate-100' // Fondo claro suave
+      gradient: 'from-slate-50 to-slate-100'
     },
     {
       name: 'MARAWA',
@@ -147,37 +133,32 @@ export default function Portfolio() {
   ];
 
   return (
-    // CAMBIO: Fondo principal a claro y sobrio
     <div className={`min-h-screen ${BG_SOBRIO} text-slate-900 overflow-hidden relative`}>
-      {/* Animated subtle background pattern (Patrón de puntos sobre fondo claro, muy sutil) */}
+      {/* Animated subtle background pattern */}
       <div 
         className={`fixed inset-0 ${BG_SOBRIO} bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:24px_24px] opacity-70`} 
       />
       
-      {/* Mouse follower effect (Ajustado a tono de azul más sobrio) */}
+      {/* Mouse follower effect */}
       <div 
         className="fixed w-96 h-96 rounded-full pointer-events-none mix-blend-multiply opacity-5 blur-3xl transition-all duration-300"
         style={{
-          background: 'radial-gradient(circle, rgba(29,78,216,0.3) 0%, transparent 70%)', // Tono Azul más oscuro (blue-700)
+          background: 'radial-gradient(circle, rgba(29,78,216,0.3) 0%, transparent 70%)',
           left: mousePosition.x - 192,
           top: mousePosition.y - 192
         }}
       />
 
-      {/* Floating Projects Button (Movido y ajustado en color) */}
-      <FloatingProjectsButton />
-
-      {/* Floating nav (Ajustes de color para ser visible en fondo claro y sobrio) */}
+      {/* Floating nav (Barra de navegación funcional y fija) */}
       <nav className="fixed top-6 left-1/2 -translate-x-1/2 z-50 bg-white/80 backdrop-blur-md rounded-full px-8 py-3 border border-slate-300 shadow-lg">
         <div className="flex items-center gap-8">
           {['Inicio', 'Perfil', 'Servicios', 'Proyectos', 'Contacto'].map((item, i) => (
             <a
               key={i}
-              href={`#${item.toLowerCase()}`}
+              href={`#${item.toLowerCase()}`} 
               className={`text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors relative group`}
             >
               {item}
-              {/* Línea de acento con gradiente sobrio */}
               <span className={`absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r ${ACENTO_GRADIENT} group-hover:w-full transition-all duration-300`} />
             </a>
           ))}
@@ -189,33 +170,30 @@ export default function Portfolio() {
         <div className="max-w-7xl w-full">
           <div className="text-center space-y-8" style={{ transform: `translateY(${scrollY * 0.15}px)` }}>
             
-            {/* Tag de profesión (Ajustado a color azul sobrio) */}
+            {/* Tag de profesión */}
             <div className="inline-flex items-center gap-2 px-6 py-2 bg-blue-700/10 border border-blue-700/20 rounded-full mb-8">
               <Sparkles className={`w-4 h-4 ${TEXTO_ACENTO}`} />
               <span className={`text-sm font-medium ${TEXTO_ACENTO}`}>Ingeniera Civil & BIM Specialist</span>
             </div>
             
-            {/* Título principal (Gradiente que termina en color oscuro para fondo claro) */}
+            {/* Título principal */}
             <h1 className="text-7xl md:text-9xl font-black tracking-tighter bg-gradient-to-r from-slate-900 via-slate-800 to-blue-800 bg-clip-text text-transparent">
               Daniela Aguilar
             </h1>
             
-            {/* Subtítulo (Ajustado a color azul sobrio) */}
+            {/* Subtítulo */}
             <p className="text-2xl md:text-3xl text-slate-600 max-w-4xl mx-auto font-light leading-relaxed">
               Transformando <span className={`font-bold text-transparent bg-clip-text bg-gradient-to-r ${ACENTO_GRADIENT}`}>infraestructura MEP</span> con precisión técnica y visión BIM
             </p>
 
-            {/* Expertise cards (Se ajustan colores para fondo claro) */}
+            {/* Expertise cards */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-16 max-w-6xl mx-auto">
               {expertise.map((item, idx) => (
                 <div 
                   key={idx}
-                  className="group relative p-6 md:p-8 rounded-3xl bg-white shadow-lg border border-slate-200 hover:border-blue-700 transition-all duration-500 hover:scale-105 hover:-translate-y-1 transform-gpu cursor-default"
+                  className={`group relative p-6 md:p-8 rounded-3xl bg-white shadow-lg border border-slate-200 hover:border-${ACENTO_COLOR} transition-all duration-500 hover:scale-105 hover:-translate-y-1 transform-gpu cursor-default`}
                 >
-                  {/* Overlay sutil */}
                   <div className={`absolute inset-0 bg-gradient-to-br ${item.gradient} opacity-0 group-hover:opacity-10 rounded-3xl transition-opacity duration-500`} />
-                  
-                  {/* Icono que cambia de color */}
                   <item.icon className={`w-10 h-10 md:w-12 md:h-12 mb-4 mx-auto text-slate-500 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-br ${item.gradient} transition-all duration-300`} strokeWidth={1.5} />
                   <p className="text-sm font-bold text-slate-700 group-hover:text-slate-900 transition-colors">
                     {item.label}
@@ -228,10 +206,10 @@ export default function Portfolio() {
         </div>
       </section>
 
-      {/* Contact buttons - Floating (Ajustado el color de acento y sombra) */}
+      {/* Contact buttons - Floating (enlaces funcionales) */}
       <div className="fixed right-8 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-3">
         {[
-          { icon: Linkedin, href: 'https://www.linkedin.com/in/danielaf-aguilar/', color: 'from-blue-700 to-blue-800' }, // Azul sobrio
+          { icon: Linkedin, href: 'https://www.linkedin.com/in/danielaf-aguilar/', color: 'from-blue-700 to-blue-800' },
           { icon: MessageCircle, href: 'https://wa.me/573209207488', color: 'from-green-600 to-green-700' },
           { icon: Mail, href: 'mailto:danielaf.aguilar@gmail.com', color: 'from-slate-500 to-slate-600' },
           { icon: FileText, href: '/cv/CV Daniela Aguilar_ESP.pdf', color: 'from-slate-700 to-slate-800' }
@@ -255,7 +233,6 @@ export default function Portfolio() {
             <h2 className="text-5xl md:text-7xl font-black mb-4 bg-gradient-to-r from-slate-900 to-slate-600 bg-clip-text text-transparent">
               Perfil Profesional
             </h2>
-            {/* Línea de acento sobria */}
             <div className={`h-1.5 w-32 bg-gradient-to-r ${ACENTO_GRADIENT} mx-auto rounded-full`} />
           </div>
 
@@ -270,7 +247,6 @@ export default function Portfolio() {
               </p>
 
               <div className="space-y-4 pt-6">
-                {/* Bloque de Colaboración BIM (Fondo claro con acento sobrio) */}
                 <div className={`p-6 rounded-2xl bg-slate-100 shadow-md border border-blue-300 hover:border-${ACENTO_COLOR} transition-colors`}>
                   <div className="flex items-start gap-4">
                     <Users className={`w-8 h-8 ${TEXTO_ACENTO} flex-shrink-0 mt-1`} />
@@ -283,7 +259,6 @@ export default function Portfolio() {
                   </div>
                 </div>
 
-                {/* Bloque de Cumplimiento Normativo (Fondo claro neutro) */}
                 <div className="p-6 rounded-2xl bg-slate-100 shadow-md border border-slate-300 hover:border-slate-400 transition-colors">
                   <div className="flex items-start gap-4">
                     <CheckCircle2 className="w-8 h-8 text-slate-500 flex-shrink-0 mt-1" />
@@ -299,7 +274,6 @@ export default function Portfolio() {
             </div>
 
             <div className="space-y-8">
-              {/* Stack Técnico */}
               <div>
                 <h3 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-3">
                   <Briefcase className={`w-6 h-6 ${TEXTO_ACENTO}`} />
@@ -309,7 +283,6 @@ export default function Portfolio() {
                   {['Revit MEP', 'EPANET', 'The Sprinkler Program', 'Navisworks', 'AutoCAD', 'BIM 360', 'ACC'].map((skill, i) => (
                     <span
                       key={i}
-                      // Fondo de skill claro y texto oscuro, acento sobrio en hover
                       className={`px-5 py-2.5 rounded-xl bg-slate-100 border border-slate-300 text-slate-700 text-sm font-semibold hover:bg-blue-700/10 hover:border-blue-700 transition-all duration-300`}
                     >
                       {skill}
@@ -318,7 +291,6 @@ export default function Portfolio() {
                 </div>
               </div>
 
-              {/* Competencias Clave */}
               <div>
                 <h3 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-3">
                   <Award className={`w-6 h-6 ${TEXTO_ACENTO}`} />
@@ -333,7 +305,6 @@ export default function Portfolio() {
                     'Inglés B2 - Upper Intermediate'
                   ].map((strength, i) => (
                     <div key={i} className="flex items-center gap-3 group cursor-default">
-                      {/* Punto de acento sobrio */}
                       <div className={`w-2.5 h-2.5 rounded-full bg-gradient-to-r ${ACENTO_GRADIENT} group-hover:scale-150 transition-transform`} />
                       <span className="text-slate-700 group-hover:text-slate-900 transition-colors text-lg">
                         {strength}
@@ -348,13 +319,12 @@ export default function Portfolio() {
       </section>
 
       {/* Services Section */}
-      <section id="servicios" className="relative py-32 px-6 bg-slate-100"> {/* Fondo ligeramente gris */}
+      <section id="servicios" className="relative py-32 px-6 bg-slate-100">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-20">
             <h2 className="text-5xl md:text-7xl font-black mb-4 bg-gradient-to-r from-slate-900 to-slate-600 bg-clip-text text-transparent">
               Servicios Especializados
             </h2>
-            {/* Línea de acento sobria */}
             <div className={`h-1.5 w-32 bg-gradient-to-r ${ACENTO_GRADIENT} mx-auto rounded-full mb-6`} />
             <p className="text-xl text-slate-600">Soluciones integrales en diseño MEP bajo metodología BIM</p>
           </div>
@@ -365,7 +335,7 @@ export default function Portfolio() {
                 title: 'Diseño Hidrosanitario',
                 items: ['Redes de acueducto', 'Alcantarillado sanitario y pluvial', 'Sistemas de bombeo', 'Análisis hidráulico con EPANET'],
                 icon: Droplets,
-                iconColor: 'text-blue-700' // Azul sobrio
+                iconColor: 'text-blue-700'
               },
               {
                 title: 'Protección Contra Incendio',
@@ -383,7 +353,7 @@ export default function Portfolio() {
                 title: 'Modelado BIM LOD 350',
                 items: ['Modelos MEP en Revit', 'Familias paramétricas', 'Cuantificación automatizada', 'Planos constructivos'],
                 icon: Building2,
-                iconColor: 'text-blue-700' // Azul sobrio
+                iconColor: 'text-blue-700'
               },
               {
                 title: 'Coordinación Multidisciplinaria',
@@ -400,7 +370,6 @@ export default function Portfolio() {
             ].map((service, idx) => (
               <div 
                 key={idx}
-                // Contenedores claros con sombra y borde sutil. Hover con borde azul sobrio
                 className={`group p-8 rounded-2xl bg-white shadow-lg border border-slate-200 hover:border-${ACENTO_COLOR} transition-all duration-300 hover:-translate-y-2 transform-gpu`}
               >
                 <service.icon className={`w-12 h-12 mb-4 ${service.iconColor} transition-colors`} strokeWidth={1.5} />
@@ -426,7 +395,6 @@ export default function Portfolio() {
             <h2 className="text-5xl md:text-7xl font-black mb-4 bg-gradient-to-r from-slate-900 to-slate-600 bg-clip-text text-transparent">
               Proyectos Destacados
             </h2>
-            {/* Línea de acento sobria */}
             <div className={`h-1.5 w-32 bg-gradient-to-r ${ACENTO_GRADIENT} mx-auto rounded-full mb-6`} />
             <p className="text-xl text-slate-600">+5,000 unidades diseñadas · LOD 350 · Metodología BIM</p>
           </div>
@@ -439,7 +407,7 @@ export default function Portfolio() {
                   idx === projects.length - 1 ? 'md:col-span-2 md:max-w-3xl md:mx-auto' : ''
                 }`}
               >
-                {/* Image reveal (Fondo de imagen) */}
+                {/* Image reveal */}
                 {project.image && (
                   <div className="relative overflow-hidden max-h-0 group-hover:max-h-[1000px] transition-all duration-700 ease-in-out">
                     <div className="bg-slate-200">
@@ -449,7 +417,6 @@ export default function Portfolio() {
                         className="w-full h-auto object-contain"
                       />
                     </div>
-                    {/* Sombra suave al final de la imagen */}
                     <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent pointer-events-none" />
                   </div>
                 )}
@@ -469,7 +436,7 @@ export default function Portfolio() {
                       </div>
                     </div>
                     
-                    {/* **NUEVA ESTRUCTURA DEL LADO DERECHO** */}
+                    {/* ESTRUCTURA AJUSTADA: LOD, Reciente, Ver */}
                     <div className="flex flex-col items-end space-y-2 flex-shrink-0">
                         {/* LOD */}
                         <div className="px-3 py-1.5 bg-slate-200 rounded-lg text-xs font-bold text-slate-700 border border-slate-300">
@@ -483,7 +450,7 @@ export default function Portfolio() {
                           </div>
                         )}
                         
-                        {/* Ícono de Ver */}
+                        {/* Ícono de Ver (El usuario puede añadir la funcionalidad aquí) */}
                         <button className={`w-8 h-8 flex items-center justify-center rounded-full border border-slate-300 text-slate-500 hover:text-${ACENTO_COLOR} hover:border-${ACENTO_COLOR} transition-colors`}>
                             <Eye className="w-4 h-4" />
                         </button>
