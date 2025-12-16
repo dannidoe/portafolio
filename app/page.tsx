@@ -155,6 +155,7 @@ export default function Portfolio() {
           {['Inicio', 'Perfil', 'Servicios', 'Proyectos', 'Contacto'].map((item, i) => (
             <a
               key={i}
+              // Enlaces funcionales a las secciones. 'Contacto' apunta a #contacto
               href={`#${item.toLowerCase()}`} 
               className={`text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors relative group`}
             >
@@ -283,7 +284,7 @@ export default function Portfolio() {
                   {['Revit MEP', 'EPANET', 'The Sprinkler Program', 'Navisworks', 'AutoCAD', 'BIM 360', 'ACC'].map((skill, i) => (
                     <span
                       key={i}
-                      className={`px-5 py-2.5 rounded-xl bg-slate-100 border border-slate-300 text-slate-700 text-sm font-semibold hover:bg-blue-700/10 hover:border-blue-700 transition-all duration-300`}
+                      className="px-5 py-2.5 rounded-xl bg-slate-100 border border-slate-300 text-slate-700 text-sm font-semibold hover:bg-blue-700/10 hover:border-blue-700 transition-all duration-300"
                     >
                       {skill}
                     </span>
@@ -505,8 +506,8 @@ export default function Portfolio() {
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="relative py-32 px-6">
+      {/* CTA (Se le añade el ID "contacto" para que el nav funcione) */}
+      <section id="contacto" className="relative py-32 px-6">
         <div className="max-w-5xl mx-auto">
           <div className={`relative p-12 md:p-16 rounded-3xl bg-gradient-to-br ${ACENTO_GRADIENT} overflow-hidden shadow-2xl shadow-blue-500/30`}>
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.1),transparent_50%)]" />
