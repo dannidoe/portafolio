@@ -1,415 +1,508 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import NextImage from 'next/image';
-import { Building2, Droplets, Flame, AlarmSmoke, GraduationCap, Users, CheckCircle2, Linkedin, MessageCircle, Mail, FileUser } from 'lucide-react';
+import { Building2, Droplets, Flame, AlarmSmoke, GraduationCap, Users, CheckCircle2, Linkedin, MessageCircle, Mail, Award, Briefcase, FileText, ArrowRight, Sparkles, Eye } from 'lucide-react';
+
+// Componente ajustado para el botón de Proyectos Flotante
+const FloatingProjectsButton = () => {
+    return (
+        // Se sube la posición (top-40) y se mantiene fijo (fixed)
+        <a 
+            href="#proyectos"
+            className="fixed top-40 right-8 z-50 inline-flex items-center gap-2 px-6 py-3 
+            // Tonos azules menos saturados para sobriedad
+            bg-gradient-to-r from-blue-700 to-blue-800 text-white rounded-full font-bold 
+            shadow-xl shadow-blue-500/30 hover:scale-105 transition-all duration-300 transform-gpu"
+        >
+            Ver Proyectos 
+            <ArrowRight className="w-5 h-5 ml-1" />
+        </a>
+    );
+}
+
 
 export default function Portfolio() {
   const [scrollY, setScrollY] = useState(0);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
+    const handleMouseMove = (e) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+    
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
   }, []);
 
-  const expertise = [
-    { icon: Droplets, label: 'Hidrosanitarias', color: 'from-blue-400 to-cyan-400' },
-    { icon: AlarmSmoke, label: 'Redes Contra Incendio', color: 'from-blue-500 to-indigo-500' },
-    { icon: Flame, label: 'Redes de Gas', color: 'from-cyan-400 to-teal-400' },
-    { icon: Building2, label: 'Metodología BIM', color: 'from-indigo-400 to-blue-500' }
-  ];
+  // Tonos más sobrios y menos saturados
+  const ACENTO_COLOR = 'blue-700';
+  const ACENTO_GRADIENT = 'from-blue-700 to-blue-800'; 
+  const TEXTO_ACENTO = 'text-blue-800';
+  const BG_SOBRIO = 'bg-slate-50';
 
-  const skills = [
-    'Revit MEP', 'EPANET', 'The Sprinkler Program', 'Navisworks',
-    'AutoCAD', 'BIM 360', 'Autodesk Construction Cloud'
+  const expertise = [
+    { icon: Droplets, label: 'Hidrosanitarias', gradient: 'from-blue-400 to-blue-500' },
+    { icon: AlarmSmoke, label: 'Contra Incendio', gradient: 'from-orange-500 to-red-600' },
+    { icon: Flame, label: 'Redes de Gas', gradient: 'from-yellow-400 to-orange-500' },
+    { icon: Building2, label: 'Metodología BIM', gradient: 'from-slate-400 to-blue-400' }
   ];
 
   const projects = [
+    // El gradient de los proyectos se cambia para ser visualmente agradable en fondo claro
     {
       name: 'PARQUES DEL VÍNCULO',
       year: '2025',
-      location: 'Soacha - Colombia',
-      type: 'Multifamiliar VIS',
-      units: '672 unidades',
-      area: '27,990.91 m²',
+      location: 'Soacha',
+      type: 'VIS',
+      units: '672',
+      area: '27,990 m²',
       lod: 'LOD 350',
-      description: 'Lideré el equipo de modelado desarrollando sistemas completos de acueducto, alcantarillado sanitario y pluvial, gas, PCI y bombeo, incluyendo redes exteriores integradas con infraestructura municipal.',
-      tools: ['Revit', 'EPANET', 'The Sprinkler Program', 'Navisworks'],
+      description: 'Lideré el equipo desarrollando sistemas completos de acueducto, alcantarillado, gas, PCI y bombeo con integración de infraestructura municipal.',
+      tools: ['Revit', 'EPANET', 'Sprinkler', 'Navisworks'],
       highlight: true,
-      image: null
+      gradient: 'from-slate-50 to-slate-100' // Fondo claro suave
     },
     {
       name: 'MARAWA',
       year: '2025',
-      location: 'Santa Marta - Colombia',
-      type: 'Multifamiliar NO VIS',
-      units: '278 apartamentos',
-      area: '32,114.23 m²',
+      location: 'Santa Marta',
+      type: 'NO VIS',
+      units: '278',
+      area: '32,114 m²',
       lod: 'LOD 350',
-      description: 'Proyecto de alta gama diseñado para vivienda permanente y alquiler a corto plazo. Coordiné la integración de todos los sistemas MEP con análisis hidráulico detallado y revisión multidisciplinaria.',
-      tools: ['Revit', 'EPANET', 'The Sprinkler Program', 'Navisworks'],
+      description: 'Proyecto premium con análisis hidráulico detallado y coordinación integral de sistemas MEP para vivienda de alta gama.',
+      tools: ['Revit', 'EPANET', 'Sprinkler', 'Navisworks'],
       highlight: true,
       image: "/images/projects/marawa.png",
-      imageCaption: 'Vista de proyecto coordinada en Navisworks, que ilustra la alineación de los modelos MEP, arquitectónicos y estructurales dentro del entorno digital'
+      gradient: 'from-slate-50 to-slate-100'
     },
     {
       name: 'EL COUNTRY RESERVADO',
       year: '2024',
-      location: 'Santa Marta - Colombia',
-      type: 'Multifamiliar NO VIS',
-      units: '278 apartamentos',
-      area: '29,797.33 m²',
+      location: 'Santa Marta',
+      type: 'NO VIS',
+      units: '278',
+      area: '29,797 m²',
       lod: 'LOD 350',
-      description: 'Desarrollé la ingeniería de detalle de las redes hidrosanitarias, gas y protección contra incendio, asegurando compatibilidad espacial y cumplimiento normativo en un proyecto de alta especificación técnica.',
-      tools: ['Revit', 'EPANET', 'The Sprinkler Program', 'Navisworks'],
-      image: null
+      description: 'Ingeniería de detalle con cumplimiento normativo riguroso en proyecto de alta especificación técnica.',
+      tools: ['Revit', 'EPANET', 'Sprinkler', 'Navisworks'],
+      gradient: 'from-slate-50 to-slate-100'
     },
     {
       name: 'CENTRAL 68',
       year: '2023',
-      location: 'Bogotá - Colombia',
-      type: 'Multifamiliar VIS',
-      units: '654 apartamentos',
-      area: '33,975.36 m²',
+      location: 'Bogotá',
+      type: 'VIS',
+      units: '654',
+      area: '33,975 m²',
       lod: 'LOD 350',
-      description: 'Diseñé los sistemas hidrosanitarios, gas, PCI y bombeo para dos torres con múltiples niveles de amenidades, coordinando modelos BIM y optimizando presiones mediante análisis hidráulico. Diseños aprobados ante Vanti.',
-      tools: ['Revit', 'EPANET', 'The Sprinkler Program', 'Navisworks'],
+      description: 'Dos torres con amenidades múltiples. Optimización de presiones mediante análisis hidráulico. Diseños aprobados Vanti.',
+      tools: ['Revit', 'EPANET', 'Sprinkler', 'Navisworks'],
       image: "/images/projects/central.png",
-      imageCaption: 'Vista completa del proyecto en Revit de las redes de tuberías coordinadas'
+      gradient: 'from-slate-50 to-slate-100'
     },
     {
       name: 'BOSQUE ROBLEDAL',
       year: '2022',
-      location: 'Rionegro - Colombia',
-      type: 'Multifamiliar VIS',
-      units: '1,512 apartamentos',
-      area: '52,438.58 m²',
+      location: 'Rionegro',
+      type: 'VIS',
+      units: '1,512',
+      area: '52,438 m²',
       lod: 'LOD 350',
-      description: 'Complejo de gran escala donde dirigí el diseño integral de redes MEP, incluyendo infraestructura exterior y coordinación de más de 1,500 unidades bajo metodología BIM.',
-      tools: ['Revit', 'EPANET', 'The Sprinkler Program'],
+      description: 'Gran escala: coordinación de +1,500 unidades con infraestructura exterior completa bajo metodología BIM.',
+      tools: ['Revit', 'EPANET', 'Sprinkler'],
       image: '/images/projects/robledal.png',
-      imageCaption: 'Vista completa del proyecto en Revit de las redes de tuberías coordinadas'
+      gradient: 'from-slate-50 to-slate-100'
     },
     {
       name: 'SENDEROS DE FONTIBÓN',
       year: '2021',
-      location: 'Bogotá - Colombia',
-      type: 'Multifamiliar VIS',
-      units: '664 apartamentos',
-      area: '36,645.39 m²',
+      location: 'Bogotá',
+      type: 'VIS',
+      units: '664',
+      area: '36,645 m²',
       lod: 'LOD 350',
-      description: 'Modelé y coordiné los sistemas de acueducto, alcantarillado, gas y protección contra incendio, garantizando la articulación entre disciplinas y el cumplimiento de especificaciones técnicas. Diseños aprobados ante Vanti.',
-      tools: ['Revit', 'EPANET', 'The Sprinkler Program'],
-      image: null
+      description: 'Modelado y coordinación integral con articulación multidisciplinaria. Diseños aprobados Vanti.',
+      tools: ['Revit', 'EPANET', 'Sprinkler'],
+      gradient: 'from-slate-50 to-slate-100'
     },
     {
       name: 'BOSQUE CEIBAL',
       year: '2020',
-      location: 'Rionegro - Colombia',
-      type: 'Multifamiliar VIS',
-      units: '608 apartamentos',
-      area: '41,013.91 m²',
+      location: 'Rionegro',
+      type: 'VIS',
+      units: '608',
+      area: '41,013 m²',
       lod: 'LOD 350',
-      description: 'Proyecto con áreas comerciales y amenidades donde desarrollé el diseño completo de redes hidrosanitarias, gas, PCI y bombeo, incluyendo conexión a servicios municipales.',
+      description: 'Diseño completo con áreas comerciales, amenidades y conexión a servicios municipales.',
       tools: ['Revit', 'EPANET'],
       image: '/images/projects/ceibal.png',
-      imageCaption: 'Sección isométrica en Revit que muestra el diseño MEP del edificio con el modelo arquitectónico en underlay'
+      gradient: 'from-slate-50 to-slate-100'
     }
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-cyan-50 text-slate-800 overflow-hidden">
-      {/* Animated Background */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none opacity-30">
-        <div className="absolute w-96 h-96 bg-blue-200 rounded-full blur-3xl -top-48 -left-48 animate-pulse" 
-             style={{ animationDuration: '8s' }} />
-        <div className="absolute w-96 h-96 bg-cyan-200 rounded-full blur-3xl -bottom-48 -right-48 animate-pulse" 
-             style={{ animationDuration: '10s', animationDelay: '2s' }} />
-        <div className="absolute w-72 h-72 bg-indigo-200 rounded-full blur-3xl top-1/2 right-1/3 animate-pulse" 
-             style={{ animationDuration: '12s', animationDelay: '4s' }} />
-      </div>
+    // CAMBIO: Fondo principal a claro y sobrio
+    <div className={`min-h-screen ${BG_SOBRIO} text-slate-900 overflow-hidden relative`}>
+      {/* Animated subtle background pattern (Patrón de puntos sobre fondo claro, muy sutil) */}
+      <div 
+        className={`fixed inset-0 ${BG_SOBRIO} bg-[radial-gradient(#e2e8f0_1px,transparent_1px)] [background-size:24px_24px] opacity-70`} 
+      />
+      
+      {/* Mouse follower effect (Ajustado a tono de azul más sobrio) */}
+      <div 
+        className="fixed w-96 h-96 rounded-full pointer-events-none mix-blend-multiply opacity-5 blur-3xl transition-all duration-300"
+        style={{
+          background: 'radial-gradient(circle, rgba(29,78,216,0.3) 0%, transparent 70%)', // Tono Azul más oscuro (blue-700)
+          left: mousePosition.x - 192,
+          top: mousePosition.y - 192
+        }}
+      />
 
-      {/* BIM MEP Pattern Background */}
-      <div className="fixed inset-0 pointer-events-none opacity-[0.03]">
-        <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-          <defs>
-            <pattern id="bim-pattern" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse">
-              {/* Tuberías horizontales */}
-              <line x1="0" y1="40" x2="200" y2="40" stroke="currentColor" strokeWidth="4"/>
-              <line x1="0" y1="80" x2="200" y2="80" stroke="currentColor" strokeWidth="3"/>
-              <line x1="0" y1="120" x2="200" y2="120" stroke="currentColor" strokeWidth="4"/>
-              <line x1="0" y1="160" x2="200" y2="160" stroke="currentColor" strokeWidth="3"/>
-              
-              {/* Tuberías verticales */}
-              <line x1="50" y1="0" x2="50" y2="200" stroke="currentColor" strokeWidth="3"/>
-              <line x1="100" y1="0" x2="100" y2="200" stroke="currentColor" strokeWidth="4"/>
-              <line x1="150" y1="0" x2="150" y2="200" stroke="currentColor" strokeWidth="3"/>
-              
-              {/* Conexiones y válvulas */}
-              <circle cx="50" cy="40" r="6" fill="currentColor"/>
-              <circle cx="100" cy="80" r="6" fill="currentColor"/>
-              <circle cx="150" cy="120" r="6" fill="currentColor"/>
-              <circle cx="100" cy="160" r="6" fill="currentColor"/>
-              
-              {/* Válvulas cuadradas */}
-              <rect x="92" y="32" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2"/>
-              <rect x="142" y="112" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2"/>
-              
-              {/* Flechas de flujo */}
-              <path d="M 60 40 L 70 35 L 70 45 Z" fill="currentColor"/>
-              <path d="M 110 80 L 120 75 L 120 85 Z" fill="currentColor"/>
-              
-              {/* Bridas */}
-              <circle cx="50" cy="120" r="4" fill="none" stroke="currentColor" strokeWidth="2"/>
-              <circle cx="150" cy="40" r="4" fill="none" stroke="currentColor" strokeWidth="2"/>
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#bim-pattern)" className="text-blue-600"/>
-        </svg>
-      </div>
+      {/* Floating Projects Button (Movido y ajustado en color) */}
+      <FloatingProjectsButton />
 
-      {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center justify-center px-6">
-        <div 
-          className="max-w-5xl w-full transform transition-all duration-1000"
-          style={{ transform: `translateY(${scrollY * 0.3}px)` }}
-        >
-          <div className="text-center space-y-8">
-            <div className="mb-8">
-              <p className="text-2xl md:text-3xl text-slate-600 font-light mb-2">¡Hola! Soy</p>
-              <h1 className="text-5xl md:text-7xl font-black tracking-tight mb-2 text-slate-900">
-                Daniela Aguilar
-              </h1>
+      {/* Floating nav (Ajustes de color para ser visible en fondo claro y sobrio) */}
+      <nav className="fixed top-6 left-1/2 -translate-x-1/2 z-50 bg-white/80 backdrop-blur-md rounded-full px-8 py-3 border border-slate-300 shadow-lg">
+        <div className="flex items-center gap-8">
+          {['Inicio', 'Perfil', 'Servicios', 'Proyectos', 'Contacto'].map((item, i) => (
+            <a
+              key={i}
+              href={`#${item.toLowerCase()}`}
+              className={`text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors relative group`}
+            >
+              {item}
+              {/* Línea de acento con gradiente sobrio */}
+              <span className={`absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r ${ACENTO_GRADIENT} group-hover:w-full transition-all duration-300`} />
+            </a>
+          ))}
+        </div>
+      </nav>
+
+      {/* Hero */}
+      <section id="inicio" className="relative min-h-screen flex items-center justify-center px-6 pt-32 pb-16">
+        <div className="max-w-7xl w-full">
+          <div className="text-center space-y-8" style={{ transform: `translateY(${scrollY * 0.15}px)` }}>
+            
+            {/* Tag de profesión (Ajustado a color azul sobrio) */}
+            <div className="inline-flex items-center gap-2 px-6 py-2 bg-blue-700/10 border border-blue-700/20 rounded-full mb-8">
+              <Sparkles className={`w-4 h-4 ${TEXTO_ACENTO}`} />
+              <span className={`text-sm font-medium ${TEXTO_ACENTO}`}>Ingeniera Civil & BIM Specialist</span>
             </div>
             
-            <div className="inline-block">
-              <h2 className="text-4xl md:text-6xl font-black tracking-tight mb-4 bg-gradient-to-r from-blue-600 via-cyan-500 to-indigo-600 bg-clip-text text-transparent">
-                Ingeniería + Diseño
-              </h2>
-              <div className="h-1 bg-gradient-to-r from-blue-500 via-cyan-400 to-indigo-500 rounded-full" />
-            </div>
+            {/* Título principal (Gradiente que termina en color oscuro para fondo claro) */}
+            <h1 className="text-7xl md:text-9xl font-black tracking-tighter bg-gradient-to-r from-slate-900 via-slate-800 to-blue-800 bg-clip-text text-transparent">
+              Daniela Aguilar
+            </h1>
             
-            <p className="text-xl md:text-2xl text-slate-700 font-light max-w-3xl mx-auto leading-relaxed">
-              Especialista en <span className="text-cyan-600 font-semibold">diseño de redes MEP</span> con metodología BIM, 
-              optimizando sistemas hidráulicos y coordinación multidisciplinaria
+            {/* Subtítulo (Ajustado a color azul sobrio) */}
+            <p className="text-2xl md:text-3xl text-slate-600 max-w-4xl mx-auto font-light leading-relaxed">
+              Transformando <span className={`font-bold text-transparent bg-clip-text bg-gradient-to-r ${ACENTO_GRADIENT}`}>infraestructura MEP</span> con precisión técnica y visión BIM
             </p>
 
-            {/* Expertise Grid */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-12">
+            {/* Expertise cards (Se ajustan colores para fondo claro) */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-16 max-w-6xl mx-auto">
               {expertise.map((item, idx) => (
                 <div 
                   key={idx}
-                  className="group relative p-6 rounded-2xl bg-white/70 backdrop-blur-sm border border-slate-200 hover:border-blue-400 transition-all duration-500 hover:scale-105 hover:-translate-y-2 shadow-sm hover:shadow-xl"
-                  style={{ animationDelay: `${idx * 100}ms` }}
+                  className="group relative p-6 md:p-8 rounded-3xl bg-white shadow-lg border border-slate-200 hover:border-blue-700 transition-all duration-500 hover:scale-105 hover:-translate-y-1 transform-gpu cursor-default"
                 >
-                  <div className={`absolute inset-0 bg-gradient-to-br ${item.color} opacity-0 group-hover:opacity-20 rounded-2xl transition-opacity duration-500`} />
-                  <item.icon className="w-10 h-10 mb-3 mx-auto text-slate-600 group-hover:text-slate-900 transition-colors duration-300" />
-                  <p className="text-sm font-medium text-slate-700 group-hover:text-slate-900 transition-colors duration-300">
+                  {/* Overlay sutil */}
+                  <div className={`absolute inset-0 bg-gradient-to-br ${item.gradient} opacity-0 group-hover:opacity-10 rounded-3xl transition-opacity duration-500`} />
+                  
+                  {/* Icono que cambia de color */}
+                  <item.icon className={`w-10 h-10 md:w-12 md:h-12 mb-4 mx-auto text-slate-500 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-br ${item.gradient} transition-all duration-300`} strokeWidth={1.5} />
+                  <p className="text-sm font-bold text-slate-700 group-hover:text-slate-900 transition-colors">
                     {item.label}
                   </p>
                 </div>
               ))}
             </div>
-          </div>
-        </div>
-
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2 animate-bounce">
-          <div className="w-6 h-10 border-2 border-blue-400 rounded-full flex justify-center pt-2">
-            <div className="w-1 h-2 bg-blue-500 rounded-full animate-pulse" />
+            
           </div>
         </div>
       </section>
 
-      {/* Floating Contact Buttons */}
-      <div className="fixed right-6 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-4">
-        <a 
-          href="https://www.linkedin.com/in/danielaf-aguilar/" 
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group flex items-center justify-center w-14 h-14 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-full hover:shadow-2xl hover:shadow-blue-400/50 hover:scale-110 transition-all duration-300"
-          title="LinkedIn"
-        >
-          <Linkedin className="w-6 h-6" />
-        </a>
-        <a 
-          href="https://wa.me/573209207488" 
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group flex items-center justify-center w-14 h-14 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-full hover:shadow-2xl hover:shadow-green-400/50 hover:scale-110 transition-all duration-300"
-          title="WhatsApp"
-        >
-          <MessageCircle className="w-6 h-6" />
-        </a>
-        <a 
-          href="mailto:danielaf.aguilar@gmail.com"
-          className="group flex items-center justify-center w-14 h-14 bg-gradient-to-r from-indigo-500 to-blue-600 text-white rounded-full hover:shadow-2xl hover:shadow-indigo-400/50 hover:scale-110 transition-all duration-300"
-          title="Email"
-        >
-          <Mail className="w-6 h-6" />
-        </a>
-        <a 
-          href="/cv/CV Daniela Aguilar_ESP.pdf"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group flex items-center justify-center w-14 h-14 bg-gradient-to-r from-slate-600 to-slate-700 text-white rounded-full hover:shadow-2xl hover:shadow-slate-400/50 hover:scale-110 transition-all duration-300"
-          title="Ver CV"
-        >
-          <FileUser className="w-6 h-6" />
-        </a>
+      {/* Contact buttons - Floating (Ajustado el color de acento y sombra) */}
+      <div className="fixed right-8 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-3">
+        {[
+          { icon: Linkedin, href: 'https://www.linkedin.com/in/danielaf-aguilar/', color: 'from-blue-700 to-blue-800' }, // Azul sobrio
+          { icon: MessageCircle, href: 'https://wa.me/573209207488', color: 'from-green-600 to-green-700' },
+          { icon: Mail, href: 'mailto:danielaf.aguilar@gmail.com', color: 'from-slate-500 to-slate-600' },
+          { icon: FileText, href: '/cv/CV Daniela Aguilar_ESP.pdf', color: 'from-slate-700 to-slate-800' }
+        ].map((item, i) => (
+          <a
+            key={i}
+            href={item.href}
+            target={item.href.startsWith('http') ? '_blank' : undefined}
+            rel={item.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+            className={`group relative w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-gradient-to-br ${item.color} flex items-center justify-center hover:scale-110 hover:shadow-xl hover:shadow-slate-400/50 transition-all duration-300 text-white`}
+          >
+            <item.icon className="w-6 h-6" />
+          </a>
+        ))}
       </div>
 
-      {/* About Section */}
-      <section className="relative py-24 px-6">
-        <div className="max-w-5xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
+      {/* About */}
+      <section id="perfil" className="relative py-32 px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-20">
+            <h2 className="text-5xl md:text-7xl font-black mb-4 bg-gradient-to-r from-slate-900 to-slate-600 bg-clip-text text-transparent">
+              Perfil Profesional
+            </h2>
+            {/* Línea de acento sobria */}
+            <div className={`h-1.5 w-32 bg-gradient-to-r ${ACENTO_GRADIENT} mx-auto rounded-full`} />
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-12">
             <div className="space-y-6">
-              <div className="flex items-center gap-3 mb-6">
-                <GraduationCap className="w-8 h-8 text-blue-600" />
-                <h2 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
-                  Sobre Mí
-                </h2>
-              </div>
-              
-              <p className="text-lg text-slate-700 leading-relaxed text-justify">
-                Ingeniera civil especializada en <span className="text-blue-700 font-semibold">diseño de redes hidrosanitarias, 
-                gas y protección contra incendios</span> bajo metodología BIM.
+              <p className="text-xl text-slate-700 leading-relaxed">
+                Ingeniera civil con <span className={`${TEXTO_ACENTO} font-bold`}>+5 años especializándome</span> en diseño de redes hidrosanitarias, gas y protección contra incendios bajo metodología BIM.
               </p>
               
-              <p className="text-lg text-slate-700 leading-relaxed text-justify">
-                Actualmente curso <span className="text-indigo-700 font-semibold">Maestría en Hidrosistemas</span>, 
-                fortaleciendo mi capacidad para optimizar sistemas con comprensión profunda del comportamiento hidráulico.
+              <p className="text-xl text-slate-700 leading-relaxed">
+                Actualmente curso <span className="text-slate-900 font-bold">Maestría en Hidrosistemas</span> para profundizar en optimización y análisis hidráulico avanzado.
               </p>
 
-              <p className="text-lg text-slate-700 leading-relaxed text-justify">
-                Mi experiencia en obra y coordinación BIM me permite integrar <span className="text-cyan-700 font-semibold">criterios 
-                técnicos, constructivos y normativos</span> para entregar diseños coherentes y ejecutables.
-              </p>
+              <div className="space-y-4 pt-6">
+                {/* Bloque de Colaboración BIM (Fondo claro con acento sobrio) */}
+                <div className={`p-6 rounded-2xl bg-slate-100 shadow-md border border-blue-300 hover:border-${ACENTO_COLOR} transition-colors`}>
+                  <div className="flex items-start gap-4">
+                    <Users className={`w-8 h-8 ${TEXTO_ACENTO} flex-shrink-0 mt-1`} />
+                    <div>
+                      <h4 className="font-bold text-slate-900 mb-2 text-lg">Colaboración BIM</h4>
+                      <p className="text-slate-600 text-sm leading-relaxed">
+                        Coordinación multidisciplinaria en BIM 360 y Autodesk Construction Cloud
+                      </p>
+                    </div>
+                  </div>
+                </div>
 
-              <div className="flex items-start gap-3 p-4 bg-blue-50 border border-blue-300 rounded-xl">
-                <Users className="w-6 h-6 text-blue-700 flex-shrink-0 mt-1" />
-                <p className="text-slate-700 text-justify">
-                  Trabajo colaborativamente con equipos multidisciplinarios usando plataformas como BIM 360 y Autodesk Construction Cloud 
-                  para garantizar compatibilidad entre disciplinas.
-                </p>
-              </div>
-
-              <div className="flex items-start gap-3 p-4 bg-indigo-50 border border-indigo-300 rounded-xl mt-4">
-                <CheckCircle2 className="w-6 h-6 text-indigo-700 flex-shrink-0 mt-1" />
-                <div className="text-slate-700">
-                  <p className="font-semibold mb-2">Normatividad Aplicada</p>
-                  <p className="text-sm">NFPA · NTC 1500 · NTC 2505 · Resolución 0330 · SISTEC EAAB</p>
+                {/* Bloque de Cumplimiento Normativo (Fondo claro neutro) */}
+                <div className="p-6 rounded-2xl bg-slate-100 shadow-md border border-slate-300 hover:border-slate-400 transition-colors">
+                  <div className="flex items-start gap-4">
+                    <CheckCircle2 className="w-8 h-8 text-slate-500 flex-shrink-0 mt-1" />
+                    <div>
+                      <h4 className="font-bold text-slate-900 mb-2 text-lg">Cumplimiento Normativo</h4>
+                      <p className="text-slate-600 text-sm leading-relaxed">
+                        NFPA · NTC 1500 · NTC 2505 · Resolución 0330 · SISTEC EAAB
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
 
-            <div className="space-y-6">
-              <h3 className="text-2xl font-bold text-slate-900 mb-6">Herramientas & Plataformas</h3>
-              <div className="flex flex-wrap gap-3">
-                {skills.map((skill, idx) => (
-                  <div
-                    key={idx}
-                    className="group px-5 py-3 bg-white/80 backdrop-blur-sm border border-slate-300 rounded-full hover:border-blue-400 hover:bg-blue-50 transition-all duration-300 hover:scale-110 shadow-sm"
-                  >
-                    <span className="text-sm font-medium text-slate-700 group-hover:text-slate-900 transition-colors">
+            <div className="space-y-8">
+              {/* Stack Técnico */}
+              <div>
+                <h3 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-3">
+                  <Briefcase className={`w-6 h-6 ${TEXTO_ACENTO}`} />
+                  Stack Técnico
+                </h3>
+                <div className="flex flex-wrap gap-3">
+                  {['Revit MEP', 'EPANET', 'The Sprinkler Program', 'Navisworks', 'AutoCAD', 'BIM 360', 'ACC'].map((skill, i) => (
+                    <span
+                      key={i}
+                      // Fondo de skill claro y texto oscuro, acento sobrio en hover
+                      className={`px-5 py-2.5 rounded-xl bg-slate-100 border border-slate-300 text-slate-700 text-sm font-semibold hover:bg-blue-700/10 hover:border-blue-700 transition-all duration-300`}
+                    >
                       {skill}
                     </span>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
 
-              <div className="mt-12 space-y-3">
-                <h3 className="text-2xl font-bold text-slate-900 mb-6">Fortalezas Clave</h3>
-                {[
-                  'Análisis y optimización hidráulica',
-                  'Coordinación multidisciplinaria BIM',
-                  'Conocimiento de estándares normativos',
-                  'Visión constructiva práctica',
-                  'Inglés B2 - Upper Intermediate'
-                ].map((strength, idx) => (
-                  <div key={idx} className="flex items-center gap-3 group">
-                    <CheckCircle2 className="w-5 h-5 text-blue-600 group-hover:scale-125 transition-transform" />
-                    <span className="text-slate-700 group-hover:text-slate-900 transition-colors">
-                      {strength}
-                    </span>
-                  </div>
-                ))}
+              {/* Competencias Clave */}
+              <div>
+                <h3 className="text-2xl font-bold text-slate-900 mb-6 flex items-center gap-3">
+                  <Award className={`w-6 h-6 ${TEXTO_ACENTO}`} />
+                  Competencias Clave
+                </h3>
+                <div className="space-y-3">
+                  {[
+                    'Análisis y optimización hidráulica',
+                    'Coordinación multidisciplinaria BIM',
+                    'Dominio normativo técnico',
+                    'Visión constructiva integral',
+                    'Inglés B2 - Upper Intermediate'
+                  ].map((strength, i) => (
+                    <div key={i} className="flex items-center gap-3 group cursor-default">
+                      {/* Punto de acento sobrio */}
+                      <div className={`w-2.5 h-2.5 rounded-full bg-gradient-to-r ${ACENTO_GRADIENT} group-hover:scale-150 transition-transform`} />
+                      <span className="text-slate-700 group-hover:text-slate-900 transition-colors text-lg">
+                        {strength}
+                      </span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Projects Section */}
-      <section className="relative py-24 px-6 bg-gradient-to-b from-transparent via-white/50 to-transparent">
+      {/* Services Section */}
+      <section id="servicios" className="relative py-32 px-6 bg-slate-100"> {/* Fondo ligeramente gris */}
         <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent mb-4">
+          <div className="text-center mb-20">
+            <h2 className="text-5xl md:text-7xl font-black mb-4 bg-gradient-to-r from-slate-900 to-slate-600 bg-clip-text text-transparent">
+              Servicios Especializados
+            </h2>
+            {/* Línea de acento sobria */}
+            <div className={`h-1.5 w-32 bg-gradient-to-r ${ACENTO_GRADIENT} mx-auto rounded-full mb-6`} />
+            <p className="text-xl text-slate-600">Soluciones integrales en diseño MEP bajo metodología BIM</p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              {
+                title: 'Diseño Hidrosanitario',
+                items: ['Redes de acueducto', 'Alcantarillado sanitario y pluvial', 'Sistemas de bombeo', 'Análisis hidráulico con EPANET'],
+                icon: Droplets,
+                iconColor: 'text-blue-700' // Azul sobrio
+              },
+              {
+                title: 'Protección Contra Incendio',
+                items: ['Diseño de redes PCI', 'Cálculos con The Sprinkler Program', 'Cumplimiento NFPA', 'Coordinación con arquitectura'],
+                icon: AlarmSmoke,
+                iconColor: 'text-red-600'
+              },
+              {
+                title: 'Redes de Gas',
+                items: ['Diseño residencial y comercial', 'Cumplimiento NTC 2505', 'Aprobaciones ante empresas de gas', 'Especificaciones técnicas'],
+                icon: Flame,
+                iconColor: 'text-orange-500'
+              },
+              {
+                title: 'Modelado BIM LOD 350',
+                items: ['Modelos MEP en Revit', 'Familias paramétricas', 'Cuantificación automatizada', 'Planos constructivos'],
+                icon: Building2,
+                iconColor: 'text-blue-700' // Azul sobrio
+              },
+              {
+                title: 'Coordinación Multidisciplinaria',
+                items: ['Detección de conflictos', 'Revisión en Navisworks', 'Gestión en BIM 360/ACC', 'Reportes de coordinación'],
+                icon: Users,
+                iconColor: 'text-slate-600'
+              },
+              {
+                title: 'Consultoría Técnica',
+                items: ['Revisión de diseños', 'Optimización de sistemas', 'Asesoría normativa', 'Soporte en obra'],
+                icon: Award,
+                iconColor: 'text-yellow-600'
+              }
+            ].map((service, idx) => (
+              <div 
+                key={idx}
+                // Contenedores claros con sombra y borde sutil. Hover con borde azul sobrio
+                className={`group p-8 rounded-2xl bg-white shadow-lg border border-slate-200 hover:border-${ACENTO_COLOR} transition-all duration-300 hover:-translate-y-2 transform-gpu`}
+              >
+                <service.icon className={`w-12 h-12 mb-4 ${service.iconColor} transition-colors`} strokeWidth={1.5} />
+                <h3 className="text-xl font-bold text-slate-900 mb-4">{service.title}</h3>
+                <ul className="space-y-2">
+                  {service.items.map((item, i) => (
+                    <li key={i} className="flex items-start gap-2 text-slate-700 text-sm">
+                      <CheckCircle2 className={`w-4 h-4 ${service.iconColor} flex-shrink-0 mt-0.5`} />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Projects */}
+      <section id="proyectos" className="relative py-32 px-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-20">
+            <h2 className="text-5xl md:text-7xl font-black mb-4 bg-gradient-to-r from-slate-900 to-slate-600 bg-clip-text text-transparent">
               Proyectos Destacados
             </h2>
-            <p className="text-xl text-slate-600">Desarrollos multifamiliares de gran escala con metodología BIM</p>
+            {/* Línea de acento sobria */}
+            <div className={`h-1.5 w-32 bg-gradient-to-r ${ACENTO_GRADIENT} mx-auto rounded-full mb-6`} />
+            <p className="text-xl text-slate-600">+5,000 unidades diseñadas · LOD 350 · Metodología BIM</p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-8">
             {projects.map((project, idx) => (
               <div
                 key={idx}
-                className={`group relative rounded-3xl backdrop-blur-sm border transition-all duration-500 hover:scale-[1.02] hover:-translate-y-2 shadow-lg hover:shadow-2xl overflow-hidden ${
-                  project.highlight 
-                    ? 'bg-gradient-to-br from-blue-50/80 via-cyan-50/80 to-indigo-50/80 border-blue-400 hover:border-cyan-500' 
-                    : 'bg-white/80 border-slate-300 hover:border-blue-400'
+                className={`group relative rounded-3xl bg-white shadow-xl border border-slate-200 hover:border-${ACENTO_COLOR} transition-all duration-500 overflow-hidden hover:scale-[1.01] transform-gpu ${
+                  idx === projects.length - 1 ? 'md:col-span-2 md:max-w-3xl md:mx-auto' : ''
                 }`}
               >
-                {project.highlight && (
-                  <div className="absolute top-4 right-4 px-3 py-1 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-full text-xs font-bold shadow-md z-10">
-                    2025
-                  </div>
-                )}
-
+                {/* Image reveal (Fondo de imagen) */}
                 {project.image && (
-                  <div className="relative overflow-hidden max-h-0 group-hover:max-h-[600px] transition-all duration-700 ease-in-out">
-                    <div className="aspect-video bg-gradient-to-br from-slate-100 to-slate-200 overflow-hidden border-b-2 border-slate-300">
-                      <NextImage 
+                  <div className="relative overflow-hidden max-h-0 group-hover:max-h-[1000px] transition-all duration-700 ease-in-out">
+                    <div className="bg-slate-200">
+                      <img 
                         src={project.image}
-                        alt={`Proyecto ${project.name}`}
-                        width={800}
-                        height={450}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        alt={project.name}
+                        className="w-full h-auto object-contain"
                       />
                     </div>
-                    {project.imageCaption && (
-                      <div className="p-3 bg-slate-50 border-b border-slate-200">
-                        <p className="text-slate-600 text-xs italic">{project.imageCaption}</p>
-                      </div>
-                    )}
+                    {/* Sombra suave al final de la imagen */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent pointer-events-none" />
                   </div>
                 )}
 
-                <div className="p-8">
+                <div className="p-8 relative z-10">
                   <div className="flex items-start justify-between mb-4">
-                    <div>
-                      <h3 className="text-2xl font-bold text-slate-900 mb-1 group-hover:text-blue-600 transition-colors">
+                    <div className="flex-1">
+                      <h3 className={`text-3xl font-black text-slate-900 mb-3 group-hover:${TEXTO_ACENTO} transition-all duration-300`}>
                         {project.name}
                       </h3>
-                      <p className="text-blue-700 font-semibold">{project.year}</p>
+                      <div className="flex items-center gap-3 text-sm text-slate-500">
+                        <span className={`font-bold ${TEXTO_ACENTO}`}>{project.year}</span>
+                        <span>·</span>
+                        <span>{project.location}</span>
+                        <span>·</span>
+                        <span className="px-2 py-1 bg-slate-200 rounded text-xs text-slate-700">{project.type}</span>
+                      </div>
                     </div>
-                    <div className="px-3 py-1 bg-slate-200 rounded-full text-xs font-medium text-slate-700">
-                      {project.lod}
+                    
+                    {/* **NUEVA ESTRUCTURA DEL LADO DERECHO** */}
+                    <div className="flex flex-col items-end space-y-2 flex-shrink-0">
+                        {/* LOD */}
+                        <div className="px-3 py-1.5 bg-slate-200 rounded-lg text-xs font-bold text-slate-700 border border-slate-300">
+                          {project.lod}
+                        </div>
+                        
+                        {/* Reciente 2025 */}
+                        {project.highlight && (
+                          <div className={`px-3 py-1 bg-blue-700/80 rounded-lg text-xs font-bold text-white shadow-md`}>
+                            Reciente
+                          </div>
+                        )}
+                        
+                        {/* Ícono de Ver */}
+                        <button className={`w-8 h-8 flex items-center justify-center rounded-full border border-slate-300 text-slate-500 hover:text-${ACENTO_COLOR} hover:border-${ACENTO_COLOR} transition-colors`}>
+                            <Eye className="w-4 h-4" />
+                        </button>
+                    </div>
+
+                  </div>
+
+                  <div className="flex items-center gap-6 mb-6 pb-6 border-b border-slate-200">
+                    <div>
+                      <p className="text-2xl font-bold text-slate-900">{project.units}</p>
+                      <p className="text-xs text-slate-500">unidades</p>
+                    </div>
+                    <div>
+                      <p className="text-lg font-semibold text-slate-700">{project.area}</p>
+                      <p className="text-xs text-slate-500">área total</p>
                     </div>
                   </div>
 
-                  <div className="space-y-2 mb-4">
-                    <p className="text-slate-700 flex items-center gap-2">
-                      <Building2 className="w-4 h-4 text-blue-600" />
-                      {project.type}
-                    </p>
-                    <p className="text-slate-600 text-sm">📍 {project.location}</p>
-                    <p className="text-slate-800 font-semibold">{project.units}</p>
-                    <p className="text-slate-600 text-sm">📐 {project.area}</p>
-                  </div>
-
-                  <p className="text-slate-700 leading-relaxed mb-4 text-justify">
+                  <p className="text-slate-700 leading-relaxed mb-6">
                     {project.description}
                   </p>
 
@@ -417,7 +510,7 @@ export default function Portfolio() {
                     {project.tools.map((tool, i) => (
                       <span
                         key={i}
-                        className="px-3 py-1 bg-slate-100 border border-slate-300 rounded-lg text-xs text-slate-700 group-hover:border-blue-400 group-hover:bg-blue-50 transition-colors"
+                        className="px-3 py-1.5 bg-slate-200 border border-slate-300 rounded-lg text-xs font-medium text-slate-600"
                       >
                         {tool}
                       </span>
@@ -428,18 +521,16 @@ export default function Portfolio() {
             ))}
           </div>
 
-          {/* Stats Summary */}
-          <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6">
+          {/* Stats */}
+          <div className="mt-24 grid grid-cols-2 md:grid-cols-3 gap-6">
             {[
-              { label: 'Unidades Diseñadas', value: '5,000+' },
-              { label: 'Nivel de Detalle', value: 'LOD 350' },
-              { label: 'Normatividad', value: 'NFPA · NTC' },
-              { label: 'Años de Experiencia', value: '5+' }
-            ].map((stat, idx) => (
-              <div key={idx} className="text-center p-6 bg-white/80 rounded-2xl border border-slate-300 hover:border-blue-400 transition-all shadow-sm hover:shadow-lg">
-                <p className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent mb-2">
-                  {stat.value}
-                </p>
+              { value: '5,000+', label: 'Unidades Diseñadas', icon: Building2 },
+              { value: 'LOD 350', label: 'Nivel de Detalle', icon: Award },
+              { value: '5+', label: 'Años de Experiencia', icon: GraduationCap }
+            ].map((stat, i) => (
+              <div key={i} className={`text-center p-8 rounded-3xl bg-white shadow-lg border border-slate-200 hover:border-${ACENTO_COLOR}/50 transition-all hover:scale-105 transform-gpu`}>
+                <stat.icon className={`w-10 h-10 mx-auto mb-4 ${TEXTO_ACENTO}`} />
+                <p className="text-4xl font-black text-slate-900 mb-2">{stat.value}</p>
                 <p className="text-sm text-slate-600">{stat.label}</p>
               </div>
             ))}
@@ -447,25 +538,38 @@ export default function Portfolio() {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="relative py-24 px-6">
-        <div className="max-w-4xl mx-auto text-center">
-          <div className="relative p-12 rounded-3xl bg-gradient-to-br from-blue-50/80 via-cyan-50/80 to-indigo-50/80 backdrop-blur-sm border border-blue-300 overflow-hidden shadow-2xl">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-400 via-cyan-400 to-indigo-400 opacity-0 hover:opacity-10 transition-opacity duration-500" />
-            <h2 className="text-4xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">
-              ¿Listo para colaborar?
-            </h2>
-            <p className="text-xl text-slate-700">
-              Trabajemos juntos en tu próximo proyecto BIM
-            </p>
+      {/* CTA */}
+      <section className="relative py-32 px-6">
+        <div className="max-w-5xl mx-auto">
+          <div className={`relative p-12 md:p-16 rounded-3xl bg-gradient-to-br ${ACENTO_GRADIENT} overflow-hidden shadow-2xl shadow-blue-500/30`}>
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(255,255,255,0.1),transparent_50%)]" />
+            <div className="relative z-10 text-center">
+              <h2 className="text-5xl md:text-6xl font-black text-white mb-6">
+                ¿Listo para colaborar?
+              </h2>
+              <p className="text-xl text-blue-100 mb-10 max-w-2xl mx-auto">
+                Llevemos tu proyecto al siguiente nivel con precisión técnica y metodología BIM
+              </p>
+              <a 
+                href="mailto:danielaf.aguilar@gmail.com"
+                className={`inline-flex items-center gap-3 px-8 py-4 bg-white ${TEXTO_ACENTO} rounded-full font-bold hover:scale-105 hover:shadow-2xl hover:shadow-white/30 transition-all duration-300`}
+              >
+                Hablemos Hoy
+                <Mail className="w-5 h-5" />
+              </a>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="relative py-8 px-6 border-t border-slate-300">
-        <div className="max-w-5xl mx-auto text-center text-slate-600 text-sm">
-          <p>© 2025 · Daniela Aguilar · Ingeniera Civil & Especialista BIM</p>
+      <footer className="relative py-12 px-6 border-t border-slate-200 bg-white">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+          <div>
+            <h3 className="text-2xl font-bold text-slate-900 mb-1">Daniela Aguilar</h3>
+            <p className="text-slate-500 text-sm">Ingeniera Civil & Especialista BIM MEP</p>
+          </div>
+          <p className="text-slate-500 text-sm">© 2025 · Todos los derechos reservados</p>
         </div>
       </footer>
     </div>
