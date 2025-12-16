@@ -331,6 +331,37 @@ export default function Portfolio() {
         </div>
       </section>
 
+      {/* Timeline horizontal REAL (antes de Servicios) */}
+      <section id="timeline" className="relative py-16 md:py-24 px-4 md:px-6 bg-white">
+        <div className="max-w-6xl mx-auto">
+          {/* Línea horizontal central */}
+          <div className="relative h-[2px] bg-slate-300 rounded-full" />
+
+          {/* Hitos arriba: líneas verticales que derivan de la horizontal */}
+          <div className="mt-10 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+            {[
+              { year: '2011', title: 'Tecnólogo en construcción', place: 'SENA' },
+              { year: '2016', title: 'Curso de AutoCAD y Revit', place: 'Videocursos · En línea' },
+              { year: '2021', title: 'Ingeniería Civil', place: 'Universidad Católica de Colombia' },
+              { year: '2025', title: 'Maestría en Hidrosistemas', place: 'Pontificia Universidad Javeriana · En curso' }
+            ].map((item, idx) => (
+              <div key={idx} className="relative flex flex-col items-center">
+                {/* Línea vertical */}
+                <div className="w-[2px] h-10 bg-slate-400" />
+                {/* Punto sutil (no tapa texto) */}
+                <div className="w-2 h-2 rounded-full bg-blue-700 mt-1" />
+                {/* Contenido arriba */}
+                <div className="mt-3 text-center">
+                  <p className="text-xs font-semibold text-blue-800">{item.year}</p>
+                  <h3 className="text-sm md:text-base font-bold text-slate-900 mt-1">{item.title}</h3>
+                  <p className="text-xs md:text-sm text-slate-600">{item.place}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Servicios */}
       <section id="servicios" className="relative py-16 md:py-32 px-4 md:px-6 bg-slate-100">
         <div className="max-w-6xl mx-auto">
