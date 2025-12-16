@@ -332,32 +332,70 @@ export default function Portfolio() {
       </section>
 
       {/* Timeline horizontal REAL (antes de Servicios) */}
-      <section id="timeline" className="relative py-16 md:py-24 px-4 md:px-6 bg-white">
+     <section id="timeline" className="relative py-16 md:py-24 px-4 md:px-6 bg-gray-50">
         <div className="max-w-6xl mx-auto">
-          {/* Línea horizontal central */}
-          <div className="relative h-[2px] bg-slate-300 rounded-full" />
-
-          {/* Hitos arriba: líneas verticales que derivan de la horizontal */}
-          <div className="mt-10 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
-            {[
-              { year: '2011', title: 'Tecnólogo en construcción', place: 'SENA' },
-              { year: '2016', title: 'Curso de AutoCAD y Revit', place: 'Videocursos · En línea' },
-              { year: '2021', title: 'Ingeniería Civil', place: 'Universidad Católica de Colombia' },
-              { year: '2025', title: 'Maestría en Hidrosistemas', place: 'Pontificia Universidad Javeriana · En curso' }
-            ].map((item, idx) => (
-              <div key={idx} className="relative flex flex-col items-center">
-                {/* Línea vertical */}
-                <div className="w-[2px] h-10 bg-slate-400" />
-                {/* Punto sutil (no tapa texto) */}
-                <div className="w-2 h-2 rounded-full bg-blue-700 mt-1" />
-                {/* Contenido arriba */}
-                <div className="mt-3 text-center">
-                  <p className="text-xs font-semibold text-blue-800">{item.year}</p>
-                  <h3 className="text-sm md:text-base font-bold text-slate-900 mt-1">{item.title}</h3>
-                  <p className="text-xs md:text-sm text-slate-600">{item.place}</p>
+          <div className="relative">
+            {/* Línea horizontal central */}
+            <div className="absolute top-1/2 left-0 right-0 h-1 bg-gradient-to-r from-blue-300 via-purple-300 to-indigo-300 transform -translate-y-1/2 rounded-full" />
+            
+            <div className="relative grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
+              {/* SENA - Arriba */}
+              <div className="flex flex-col items-center">
+                <div className="text-center px-3 bg-blue-50 rounded-lg py-4 shadow-sm border border-blue-100 mb-4">
+                  <h3 className="text-base md:text-lg font-bold text-gray-800">Tecnólogo en construcción</h3>
+                  <p className="text-xs md:text-sm text-gray-600 mt-1">SENA</p>
+                </div>
+                <div className="w-1 h-12 bg-blue-300 rounded-full" />
+                <div className="relative mt-2">
+                  <div className="w-16 h-16 rounded-full bg-blue-200 flex items-center justify-center shadow-md border-4 border-white">
+                    <span className="text-gray-800 font-bold text-base">2011</span>
+                  </div>
                 </div>
               </div>
-            ))}
+
+              {/* Curso AutoCAD - Abajo */}
+              <div className="flex flex-col items-center justify-end">
+                <div className="relative">
+                  <div className="w-14 h-14 rounded-full bg-purple-200 flex items-center justify-center shadow-md border-4 border-white">
+                    <span className="text-gray-800 font-bold text-sm">2016</span>
+                  </div>
+                </div>
+                <div className="w-1 h-12 bg-purple-300 rounded-full mt-2" />
+                <div className="text-center px-2 bg-purple-50 rounded-lg py-3 shadow-sm border border-purple-100 mt-4">
+                  <h3 className="text-sm md:text-base font-bold text-gray-800">Curso de AutoCAD y Revit</h3>
+                  <p className="text-xs text-gray-600 mt-1">Videocursos · En línea</p>
+                </div>
+              </div>
+
+              {/* Universidad Católica - Arriba */}
+              <div className="flex flex-col items-center">
+                <div className="text-center px-3 bg-sky-50 rounded-lg py-4 shadow-sm border border-sky-100 mb-4">
+                  <h3 className="text-base md:text-lg font-bold text-gray-800">Ingeniería Civil</h3>
+                  <p className="text-xs md:text-sm text-gray-600 mt-1">Universidad Católica de Colombia</p>
+                </div>
+                <div className="w-1 h-12 bg-sky-300 rounded-full" />
+                <div className="relative mt-2">
+                  <div className="w-16 h-16 rounded-full bg-sky-200 flex items-center justify-center shadow-md border-4 border-white">
+                    <span className="text-gray-800 font-bold text-base">2021</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* PUJ - Arriba */}
+              <div className="flex flex-col items-center">
+                <div className="text-center px-3 bg-indigo-50 rounded-lg py-4 shadow-sm border border-indigo-100 mb-4">
+                  <h3 className="text-base md:text-lg font-bold text-gray-800">Maestría en Hidrosistemas</h3>
+                  <p className="text-xs md:text-sm text-gray-600 mt-1">Pontificia Universidad Javeriana</p>
+                  <p className="text-xs text-indigo-600 font-semibold mt-1">En curso</p>
+                </div>
+                <div className="w-1 h-12 bg-indigo-300 rounded-full" />
+                <div className="relative mt-2">
+                  <div className="w-16 h-16 rounded-full bg-indigo-200 flex items-center justify-center shadow-md border-4 border-white">
+                    <span className="text-gray-800 font-bold text-base">2025</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
