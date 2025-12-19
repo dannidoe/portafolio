@@ -16,6 +16,8 @@ export default function Portfolio() {
   // Carrusel
   const [carouselImages, setCarouselImages] = useState<string[]>([]);
   const [carouselIndex, setCarouselIndex] = useState(0);
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => setScrollY(window.scrollY);
@@ -29,6 +31,20 @@ export default function Portfolio() {
       window.removeEventListener('mousemove', handleMouseMove);
     };
   }, []);
+
+  // Navegación con teclado
+  useEffect(() => {
+    if (carouselImages.length === 0) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') prev();
+      if (e.key === 'ArrowRight') next();
+      if (e.key === 'Escape') setCarouselImages([]);
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [carouselImages]);
 
   // Abre un carrusel con 4 imágenes: base.png, base1.png, base2.png, base3.png
   const openCarousel = (base: string) => {
@@ -44,6 +60,29 @@ export default function Portfolio() {
 
   const prev = () =>
     setCarouselIndex((i) => (i - 1 + carouselImages.length) % carouselImages.length);
+
+  // Gestión táctil para móviles
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+
+    if (isLeftSwipe) next();
+    if (isRightSwipe) prev();
+
+    setTouchStart(0);
+    setTouchEnd(0);
+  };
 
   const ACENTO_COLOR = 'blue-700';
   const ACENTO_GRADIENT = 'from-blue-700 to-blue-800';
@@ -173,16 +212,19 @@ export default function Portfolio() {
       {/* Nav flotante */}
       <nav className="fixed top-4 md:top-6 left-1/2 -translate-x-1/2 z-50 bg-white/90 backdrop-blur-md rounded-full px-3 md:px-8 py-2 md:py-3 border border-slate-300 shadow-lg max-w-[95%] md:max-w-none">
         <div className="flex items-center gap-3 md:gap-8 overflow-x-auto scrollbar-hide">
-          {['Inicio', 'Perfil', 'Servicios', 'Proyectos', 'Contacto'].map((item, i) => (
-            <a
-              key={i}
-              href={`#${item.toLowerCase()}`}
-              className={`text-xs md:text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors relative group whitespace-nowrap`}
-            >
-              {item}
-              <span className={`absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r ${ACENTO_GRADIENT} group-hover:w-full transition-all duration-300`} />
-            </a>
-          ))}
+          {['Inicio', 'Perfil', 'Formación', 'Experiencia', 'Servicios', 'Proyectos', 'Contacto'].map((item, i) => {
+            const href = item === 'Formación' ? '#timeline' : item === 'Experiencia' ? '#experiencia' : `#${item.toLowerCase()}`;
+            return (
+              <a
+                key={i}
+                href={href}
+                className={`text-xs md:text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors relative group whitespace-nowrap`}
+              >
+                {item}
+                <span className={`absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r ${ACENTO_GRADIENT} group-hover:w-full transition-all duration-300`} />
+              </a>
+            );
+          })}
         </div>
       </nav>
 
@@ -331,9 +373,16 @@ export default function Portfolio() {
         </div>
       </section>
 
-      {/* Timeline horizontal REAL (antes de Servicios) */}
-     <section id="timeline" className="relative py-16 md:py-24 px-4 md:px-6 bg-gray-50">
+      {/* Timeline Formación Académica */}
+      <section id="timeline" className="relative py-16 md:py-24 px-4 md:px-6 bg-gray-50">
         <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12 md:mb-16">
+            <h2 className="text-3xl sm:text-5xl md:text-6xl font-black mb-4 bg-gradient-to-r from-slate-900 to-slate-600 bg-clip-text text-transparent">
+              Formación Académica
+            </h2>
+            <div className={`h-1.5 w-24 md:w-32 bg-gradient-to-r ${ACENTO_GRADIENT} mx-auto rounded-full`} />
+          </div>
+          
           <div className="relative">
             {/* Línea horizontal central */}
             <div className="absolute top-1/2 left-0 right-0 h-1 bg-gradient-to-r from-blue-300 via-purple-300 to-indigo-300 transform -translate-y-1/2 rounded-full" />
@@ -395,6 +444,103 @@ export default function Portfolio() {
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Timeline Experiencia Profesional */}
+      <section id="experiencia" className="relative py-16 md:py-24 px-4 md:px-6 bg-white">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-12 md:mb-16">
+            <h2 className="text-3xl sm:text-5xl md:text-6xl font-black mb-4 bg-gradient-to-r from-slate-900 to-slate-600 bg-clip-text text-transparent">
+              Experiencia Profesional
+            </h2>
+            <div className={`h-1.5 w-24 md:w-32 bg-gradient-to-r ${ACENTO_GRADIENT} mx-auto rounded-full`} />
+          </div>
+
+          <div className="relative">
+            {/* Línea vertical con gradiente */}
+            <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-1 bg-gradient-to-b from-blue-400 via-purple-400 via-violet-400 via-fuchsia-400 to-pink-300 rounded-full" />
+
+            <div className="space-y-12 md:space-y-16">
+              {[
+                {
+                  period: '03.2021 – 11.2025',
+                  role: 'Ingeniera de Diseño',
+                  company: 'Fluxo Ingeniería S.A.S',
+                  color: 'blue',
+                  bgColor: 'bg-blue-100',
+                  borderColor: 'border-blue-200'
+                },
+                {
+                  period: '05.2020 – 03.2021',
+                  role: 'Modeladora BIM',
+                  company: 'Profesional independiente',
+                  color: 'indigo',
+                  bgColor: 'bg-indigo-100',
+                  borderColor: 'border-indigo-200'
+                },
+                {
+                  period: '06.2016 – 12.2019',
+                  role: 'Delineante de Arquitectura e Ingeniería',
+                  company: 'Proyectos Eléctricos AC S.A.S',
+                  color: 'purple',
+                  bgColor: 'bg-purple-100',
+                  borderColor: 'border-purple-200'
+                },
+                {
+                  period: '06.2014 – 05.2016',
+                  role: 'Auxiliar de Ingeniería',
+                  company: 'Ingisa Constructores S.A.S',
+                  color: 'violet',
+                  bgColor: 'bg-violet-100',
+                  borderColor: 'border-violet-200'
+                },
+                {
+                  period: '10.2012 – 04.2014',
+                  role: 'Diseñadora Acústica',
+                  company: 'Performance Colombia S.A.S',
+                  color: 'fuchsia',
+                  bgColor: 'bg-fuchsia-100',
+                  borderColor: 'border-fuchsia-200'
+                },
+                {
+                  period: '06.2011 – 02.2012',
+                  role: 'Coordinadora de Obra y Mantenimiento',
+                  company: 'Ospina Servicios Locativos S.A.S',
+                  color: 'pink',
+                  bgColor: 'bg-pink-100',
+                  borderColor: 'border-pink-200'
+                }
+              ].map((job, idx) => (
+                <div key={idx} className="relative flex items-start gap-4 md:gap-8">
+                  {/* Círculo en la línea - más grande y con sombra */}
+                  <div className={`absolute left-4 md:left-1/2 -translate-x-1/2 w-5 h-5 md:w-6 md:h-6 rounded-full ${job.bgColor} border-4 border-white shadow-xl z-10 transition-transform hover:scale-125`}>
+                    <div className={`absolute inset-1 rounded-full bg-${job.color}-500`} />
+                  </div>
+
+                  {/* Contenido - alternado en desktop con tarjeta */}
+                  <div className={`ml-12 md:ml-0 w-full md:w-[calc(50%-3rem)] ${idx % 2 === 0 ? 'md:mr-auto md:pr-8' : 'md:ml-auto md:pl-8'}`}>
+                    <div className={`inline-block relative px-4 py-3 md:px-5 md:py-4 rounded-xl ${job.bgColor} ${job.borderColor} border-2 shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1 transform-gpu ${idx % 2 === 0 ? 'md:ml-auto' : 'md:mr-auto'}`}>
+                      {/* Flecha decorativa hacia la línea - solo desktop */}
+                      <div className={`hidden md:block absolute top-1/2 -translate-y-1/2 ${idx % 2 === 0 ? 'right-0 translate-x-full' : 'left-0 -translate-x-full'} w-6 h-0.5 ${job.bgColor}`} />
+                      
+                      <div className={idx % 2 === 0 ? 'md:text-right' : 'md:text-left'}>
+                        <p className={`text-xs md:text-sm font-bold text-${job.color}-700 mb-1.5 uppercase tracking-wide`}>
+                          {job.period}
+                        </p>
+                        <h3 className="text-base md:text-lg font-black text-slate-900 mb-1">
+                          {job.role}
+                        </h3>
+                        <p className="text-sm md:text-base text-slate-700 font-medium">
+                          {job.company}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -521,7 +667,7 @@ export default function Portfolio() {
                           className="relative w-10 h-10 rounded-full border border-slate-300 flex items-center justify-center text-slate-500 hover:text-blue-700 hover:border-blue-700 hover:bg-blue-50 transition-all"
                           aria-label="Ver carrusel del proyecto"
                         >
-                          <span className="absolute inline-flex h-full w-full rounded-full bg-blue-600 opacity-20 animate-ping" />
+                          <span className="absolute inline-flex h-full w-full rounded-full bg-yellow-500 opacity-30 animate-ping" />
                           <Eye className="relative w-5 h-5" />
                         </button>
                       )}
@@ -618,7 +764,7 @@ export default function Portfolio() {
         >
           <button
             onClick={() => setCarouselImages([])}
-            className="absolute top-6 right-6 text-white"
+            className="absolute top-6 right-6 text-white hover:scale-110 transition-transform"
             aria-label="Cerrar carrusel"
           >
             <X size={28} />
@@ -629,7 +775,7 @@ export default function Portfolio() {
               e.stopPropagation();
               prev();
             }}
-            className="absolute left-4 md:left-10 text-white"
+            className="absolute left-4 md:left-10 text-white hover:scale-110 transition-transform"
             aria-label="Imagen anterior"
           >
             <ChevronLeft size={44} />
@@ -642,6 +788,9 @@ export default function Portfolio() {
             height={900}
             className="max-h-[85vh] w-auto rounded-xl"
             onClick={(e) => e.stopPropagation()}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
           />
 
           <button
@@ -649,11 +798,22 @@ export default function Portfolio() {
               e.stopPropagation();
               next();
             }}
-            className="absolute right-4 md:right-10 text-white"
+            className="absolute right-4 md:right-10 text-white hover:scale-110 transition-transform"
             aria-label="Siguiente imagen"
           >
             <ChevronRight size={44} />
           </button>
+
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2">
+            {carouselImages.map((_, i) => (
+              <div
+                key={i}
+                className={`w-2 h-2 rounded-full transition-all ${
+                  i === carouselIndex ? 'bg-white w-8' : 'bg-white/50'
+                }`}
+              />
+            ))}
+          </div>
         </div>
       )}
     </div>
